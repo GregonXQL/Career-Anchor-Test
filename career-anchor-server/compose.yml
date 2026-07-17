@@ -1,0 +1,21 @@
+services:
+  mysql:
+    image: mysql:8.4
+    environment:
+      MYSQL_DATABASE: career_anchor
+      MYSQL_USER: career_anchor
+      MYSQL_PASSWORD: career_anchor_dev
+      MYSQL_ROOT_PASSWORD: root_dev_only
+      TZ: Asia/Shanghai
+    ports:
+      - "3306:3306"
+    volumes:
+      - career-anchor-mysql:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-proot_dev_only"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+volumes:
+  career-anchor-mysql:
