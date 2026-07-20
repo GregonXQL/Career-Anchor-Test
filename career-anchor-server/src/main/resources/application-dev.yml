@@ -1,3 +1,7 @@
 app:
   wechat:
     mock-enabled: true
+    acode-env-version: develop
+    acode-check-path: false
+  admin:
+    bootstrap-password: ${ADMIN_INITIAL_PASSWORD:admin123}

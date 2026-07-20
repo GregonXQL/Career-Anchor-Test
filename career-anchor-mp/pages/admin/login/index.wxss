@@ -1,0 +1,6 @@
+.admin-login { text-align: center; }
+.admin-mark { display: flex; align-items: center; justify-content: center; width: 112rpx; height: 112rpx; margin: 60rpx auto 36rpx; border-radius: 28rpx; color: #fff; font-size: 48rpx; font-weight: 700; background: linear-gradient(135deg, #8A6A4F, #DFC9B6); }
+.password-card { margin-top: 56rpx; text-align: left; }
+.password-input { height: 92rpx; padding: 0 28rpx; border-radius: 18rpx; background: #F5F2ED; font-size: 30rpx; }
+.error { margin-top: 20rpx; color: #A35245; font-size: 25rpx; }
+.lock-hint { margin-top: 32rpx; color: #9B9189; font-size: 23rpx; }

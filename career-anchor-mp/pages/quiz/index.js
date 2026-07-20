@@ -1,19 +1,8 @@
 const auth = require('../../utils/auth')
 const request = require('../../utils/request')
+const { parseInviteOptions } = require('../../utils/invite')
 
 const DRAFT_KEY = 'quiz_draft'
-
-function parseInvite(options) {
-  if (options.inviteCode) return options.inviteCode.toUpperCase()
-  if (!options.scene) return ''
-  try {
-    const scene = decodeURIComponent(options.scene)
-    const match = scene.match(/(?:^|&)i=([23456789ABCDEFGHJKMNPQRSTUVWXYZ]{8})(?:&|$)/)
-    return match ? match[1] : ''
-  } catch (error) {
-    return ''
-  }
-}
 
 Page({
   data: {
@@ -35,7 +24,7 @@ Page({
   },
 
   onLoad(options) {
-    const inviteCode = parseInvite(options)
+    const inviteCode = parseInviteOptions(options)
     if (!inviteCode) {
       this.exitWithError('邀请二维码或邀请码格式不正确')
       return

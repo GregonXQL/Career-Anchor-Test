@@ -8,7 +8,7 @@
     <view class="state-mark">!</view>
     <view class="state-title">报告加载失败</view>
     <view class="state-desc">{{error}}</view>
-    <button class="secondary-button" bindtap="home">返回首页</button>
+    <button class="secondary-button" bindtap="home">{{adminMode ? '返回管理控制台' : '返回首页'}}</button>
   </view>
 
   <block wx:else>
@@ -70,6 +70,6 @@
       <view class="footer-line"><text>测评时间</text><text>{{report.createdAt}}</text></view>
       <view class="footer-disclaimer">测评结果仅供个人职业探索参考，不构成任何诊断或决策依据。</view>
     </view>
-    <button class="primary-button home-button" bindtap="home">返回首页</button>
+    <button class="primary-button home-button" bindtap="home">{{adminMode ? '返回管理控制台' : '返回首页'}}</button>
   </block>
 </view>

@@ -8,3 +8,4 @@
 .history-title { margin-bottom: 10rpx; color: #8A6A4F; font-size: 34rpx; font-weight: 650; }
 .count { display: flex; align-items: center; justify-content: center; min-width: 64rpx; height: 64rpx; padding: 0 10rpx; border-radius: 32rpx; color: #8A6A4F; background: #EDE7DE; font-weight: 650; }
 .disclaimer { margin-top: 72rpx; color: #9B9189; font-size: 23rpx; line-height: 1.6; text-align: center; }
+.admin-entry { margin-top: 32rpx; color: #C0B6AD; font-size: 23rpx; text-align: center; }

@@ -15,5 +15,9 @@ Page({
 
   history() {
     wx.navigateTo({ url: '/pages/history/index' })
+  },
+
+  admin() {
+    wx.navigateTo({ url: '/pages/admin/login/index' })
   }
 })

@@ -1,0 +1,107 @@
+<view class="admin-page">
+  <view class="admin-header">
+    <view><view class="admin-eyebrow">CAREER ANCHOR</view><view class="admin-title">管理控制台</view></view>
+    <view class="logout" bindtap="logout">退出管理</view>
+  </view>
+
+  <view wx:if="{{error}}" class="error-card">{{error}}</view>
+
+  <block wx:if="{{tab === 'overview'}}">
+    <view class="panel-heading"><view class="panel-title">数据概览</view><view class="panel-desc">实时汇总当前测评业务数据</view></view>
+    <view wx:if="{{stats}}" class="stats-grid">
+      <view class="stat-card"><view class="stat-number">{{stats.totalResults}}</view><view class="stat-label">测评总数</view></view>
+      <view class="stat-card accent"><view class="stat-number">{{stats.todayResults}}</view><view class="stat-label">今日测评</view></view>
+      <view class="stat-card"><view class="stat-number">{{stats.totalUsers}}</view><view class="stat-label">用户总数</view></view>
+      <view class="stat-card accent"><view class="stat-number">{{stats.activeInvites}}</view><view class="stat-label">活跃邀请码</view></view>
+    </view>
+    <view class="tip-card">管理员 Token 有效期为 2 小时。手动邀请码固定一码一次；二维码邀请码可配置多人使用。</view>
+  </block>
+
+  <block wx:if="{{tab === 'results'}}">
+    <view class="panel-heading"><view class="panel-title">全部测评</view><view class="panel-desc">共 {{resultTotal}} 条结果</view></view>
+    <view class="filter-card">
+      <input class="search-input" value="{{keyword}}" placeholder="搜索昵称或 openid 尾号" bindinput="searchInput" bindconfirm="searchResults" />
+      <view class="date-row">
+        <picker class="date-picker" mode="date" value="{{from}}" bindchange="chooseFrom"><view>{{from || '开始日期'}}</view></picker>
+        <view class="date-separator">至</view>
+        <picker class="date-picker" mode="date" value="{{to}}" bindchange="chooseTo"><view>{{to || '结束日期'}}</view></picker>
+      </view>
+      <view class="filter-actions"><view class="text-action" bindtap="clearDates">清除日期</view><button class="mini-primary" bindtap="searchResults">查询</button></view>
+    </view>
+    <view wx:if="{{!loading && !results.length}}" class="empty">暂无符合条件的测评结果</view>
+    <view class="result-card" wx:for="{{results}}" wx:key="id" data-id="{{item.id}}" bindtap="openResult">
+      <view class="result-top"><view class="result-user">{{item.userLabel}}</view><view class="result-id">#{{item.id}}</view></view>
+      <view class="result-anchor">{{item.top1Name}}</view>
+      <view class="result-time">{{item.createdAt}}</view>
+    </view>
+  </block>
+
+  <block wx:if="{{tab === 'invites'}}">
+    <view class="panel-heading"><view class="panel-title">邀请码管理</view><view class="panel-desc">生成、分发与停用邀请凭证</view></view>
+
+    <view class="form-card">
+      <view class="form-title">批量生成手动码</view>
+      <view class="field-label">生成数量（1–100）</view>
+      <input class="field-input" type="number" value="{{manualCount}}" bindinput="manualCountInput" />
+      <view class="field-label">有效期</view>
+      <view class="date-field"><picker mode="date" value="{{manualExpires}}" bindchange="manualExpiresChange"><view>{{manualExpires || '永久有效'}}</view></picker><view wx:if="{{manualExpires}}" bindtap="clearManualExpires">清除</view></view>
+      <view class="field-label">备注</view>
+      <input class="field-input" maxlength="128" value="{{manualRemark}}" placeholder="例如：校招第一批" bindinput="manualRemarkInput" />
+      <button class="primary-button form-button" loading="{{creating}}" bindtap="createManual">生成邀请码</button>
+      <view wx:if="{{createdCodes.length}}" class="created-box">
+        <view class="created-head"><text>新生成 {{createdCodes.length}} 个</text><text bindtap="copyCreated">复制全部</text></view>
+        <view class="created-codes">{{createdCodesText}}</view>
+      </view>
+    </view>
+
+    <view class="form-card">
+      <view class="form-title">生成邀请小程序码</view>
+      <view class="field-label">可用次数（1–10000）</view>
+      <input class="field-input" type="number" value="{{qrMaxUses}}" bindinput="qrMaxUsesInput" />
+      <view class="field-label">有效期</view>
+      <view class="date-field"><picker mode="date" value="{{qrExpires}}" bindchange="qrExpiresChange"><view>{{qrExpires || '永久有效'}}</view></picker><view wx:if="{{qrExpires}}" bindtap="clearQrExpires">清除</view></view>
+      <view class="field-label">备注</view>
+      <input class="field-input" maxlength="128" value="{{qrRemark}}" placeholder="例如：线下活动群发" bindinput="qrRemarkInput" />
+      <button class="secondary-button form-button" loading="{{creating}}" bindtap="createQr">创建并预览</button>
+    </view>
+
+    <scroll-view scroll-x class="status-scroll">
+      <view class="status-row">
+        <view class="status-pill {{inviteStatus === item.value ? 'selected' : ''}}" wx:for="{{statusOptions}}" wx:key="value" data-status="{{item.value}}" bindtap="selectStatus">{{item.label}}</view>
+      </view>
+    </scroll-view>
+    <view class="invite-summary">共 {{inviteTotal}} 个</view>
+    <view wx:if="{{!loading && !invites.length}}" class="empty">暂无邀请码</view>
+    <view class="invite-card" wx:for="{{invites}}" wx:key="id">
+      <view class="invite-top">
+        <view class="invite-code" data-code="{{item.code}}" bindtap="copyCode">{{item.code}}</view>
+        <view class="status status-{{item.status}}">{{item.statusLabel}}</view>
+      </view>
+      <view class="invite-meta"><text>{{item.channelLabel}}</text><text>使用 {{item.usageText}}</text><text>{{item.expiresAt || '永久有效'}}</text></view>
+      <view wx:if="{{item.remark}}" class="invite-remark">{{item.remark}}</view>
+      <view wx:if="{{item.canOperate}}" class="invite-actions">
+        <view data-id="{{item.id}}" data-code="{{item.code}}" bindtap="generateQr">生成小程序码</view>
+        <view class="danger" data-id="{{item.id}}" bindtap="disableInvite">停用</view>
+      </view>
+    </view>
+  </block>
+
+  <view wx:if="{{loading}}" class="loading">加载中…</view>
+
+  <view class="bottom-tabs">
+    <view class="tab-item {{tab === 'overview' ? 'active' : ''}}" data-tab="overview" bindtap="switchTab"><view class="tab-icon">◫</view><view>概览</view></view>
+    <view class="tab-item {{tab === 'results' ? 'active' : ''}}" data-tab="results" bindtap="switchTab"><view class="tab-icon">≡</view><view>结果</view></view>
+    <view class="tab-item {{tab === 'invites' ? 'active' : ''}}" data-tab="invites" bindtap="switchTab"><view class="tab-icon">◇</view><view>邀请码</view></view>
+  </view>
+
+  <view wx:if="{{qrImage}}" class="modal-mask" bindtap="closeQr">
+    <view class="qr-modal" catchtap="noop">
+      <view class="qr-title">邀请小程序码</view>
+      <view class="qr-code-label">{{qrCode}}</view>
+      <image class="qr-image" src="{{qrImage}}" mode="aspectFit"></image>
+      <button class="primary-button" bindtap="saveQr">保存到相册</button>
+      <button class="secondary-button share-button" bindtap="shareQr">转发图片</button>
+      <view class="modal-close" bindtap="closeQr">关闭</view>
+    </view>
+  </view>
+</view>

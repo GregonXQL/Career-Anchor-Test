@@ -14,7 +14,8 @@ class JwtUtilTest {
     void issuesAndParsesUserToken() {
         AppProperties properties = new AppProperties(
                 new AppProperties.Jwt("test-secret-must-be-at-least-thirty-two-bytes", Duration.ofDays(7), Duration.ofHours(2)),
-                new AppProperties.Wechat("", "", true),
+                new AppProperties.Wechat("", "", true, "https://api.weixin.qq.com", "develop", false),
+                new AppProperties.Admin(""),
                 new AppProperties.Assessment(6, List.of(), 3, 4));
         JwtUtil jwtUtil = new JwtUtil(properties);
 

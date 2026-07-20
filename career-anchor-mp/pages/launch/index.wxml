@@ -3,5 +3,5 @@
   <view class="title">找到你的职业锚</view>
   <view class="subtitle">理解内心真正看重的职业价值，让每一次选择更笃定。</view>
   <button class="primary-button enter" loading="{{loading}}" bindtap="enter">微信一键进入</button>
-  <view class="admin-entry">管理员入口</view>
+  <view class="admin-entry" bindtap="admin">管理员入口</view>
 </view>

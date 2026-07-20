@@ -17,4 +17,5 @@
   </view>
 
   <view class="disclaimer">测评结果仅供参考，不构成任何诊断或决策依据</view>
+  <view class="admin-entry" bindtap="admin">管理员入口</view>
 </view>

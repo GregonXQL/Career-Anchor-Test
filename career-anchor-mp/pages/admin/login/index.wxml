@@ -1,0 +1,11 @@
+<view class="page admin-login">
+  <view class="admin-mark">A</view>
+  <view class="title">管理员验证</view>
+  <view class="subtitle">管理员需要先完成微信登录，再使用管理密码进行二次验证。</view>
+  <view class="card password-card">
+    <input class="password-input" password value="{{password}}" maxlength="128" placeholder="请输入管理密码" bindinput="input" confirm-type="done" bindconfirm="submit" />
+    <view wx:if="{{error}}" class="error">{{error}}</view>
+    <button class="primary-button" loading="{{loading}}" disabled="{{!password || loading}}" bindtap="submit">进入控制面板</button>
+  </view>
+  <view class="lock-hint">连续输错 5 次将锁定 10 分钟</view>
+</view>

@@ -5,7 +5,9 @@
     "pages/invite/index",
     "pages/quiz/index",
     "pages/report/index",
-    "pages/history/index"
+    "pages/history/index",
+    "pages/admin/login/index",
+    "pages/admin/dashboard/index"
   ],
   "window": {
     "navigationBarTitleText": "职业锚测评",

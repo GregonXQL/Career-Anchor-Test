@@ -8,15 +8,21 @@ Page({
     error: '',
     report: null,
     displayScores: [],
-    topProfiles: []
+    topProfiles: [],
+    adminMode: false
   },
 
   onLoad(options) {
     const resultId = Number(options.resultId || 0)
+    this.adminMode = options.admin === '1'
+    this.setData({ adminMode: this.adminMode })
     this.resultId = resultId
     const latest = getApp().globalData.latestResult || wx.getStorageSync('latest_result')
     const resultPromise = resultId
-      ? request({ url: `/results/${resultId}` })
+      ? request({
+        url: this.adminMode ? `/admin/results/${resultId}` : `/results/${resultId}`,
+        admin: this.adminMode
+      })
       : latest ? Promise.resolve(latest) : Promise.reject(new Error('未找到测评结果'))
 
     Promise.all([resultPromise, getAnchorProfiles(false)])
@@ -44,7 +50,8 @@ Page({
   },
 
   retry() {
-    wx.redirectTo({ url: `/pages/report/index?resultId=${this.resultId || ''}` })
+    const admin = this.adminMode ? '&admin=1' : ''
+    wx.redirectTo({ url: `/pages/report/index?resultId=${this.resultId || ''}${admin}` })
   },
 
   toggleProfile(event) {
@@ -58,6 +65,13 @@ Page({
   },
 
   home() {
+    if (this.adminMode) {
+      wx.navigateBack({
+        delta: 1,
+        fail: () => wx.redirectTo({ url: '/pages/admin/dashboard/index' })
+      })
+      return
+    }
     wx.reLaunch({ url: '/pages/home/index' })
   },
 

@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -31,7 +32,8 @@ public class GlobalExceptionHandler {
         return validationResponse(message);
     }
 
-    @ExceptionHandler({ConstraintViolationException.class, HttpMessageNotReadableException.class})
+    @ExceptionHandler({ConstraintViolationException.class, HttpMessageNotReadableException.class,
+            MethodArgumentTypeMismatchException.class})
     ResponseEntity<ApiResponse<Void>> handleBadRequest(Exception exception) {
         return validationResponse(exception.getMessage());
     }

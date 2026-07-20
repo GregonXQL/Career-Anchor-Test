@@ -1,6 +1,7 @@
 const { baseUrl } = require('./config')
 
 const TOKEN_KEY = 'auth_token'
+const ADMIN_TOKEN_KEY = 'admin_token'
 
 function getToken() {
   return wx.getStorageSync(TOKEN_KEY) || ''
@@ -12,6 +13,19 @@ function setToken(token) {
 
 function clearToken() {
   wx.removeStorageSync(TOKEN_KEY)
+  clearAdminToken()
+}
+
+function getAdminToken() {
+  return wx.getStorageSync(ADMIN_TOKEN_KEY) || ''
+}
+
+function setAdminToken(token) {
+  wx.setStorageSync(ADMIN_TOKEN_KEY, token)
+}
+
+function clearAdminToken() {
+  wx.removeStorageSync(ADMIN_TOKEN_KEY)
 }
 
 function login() {
@@ -47,4 +61,13 @@ function ensureLogin() {
   return getToken() ? Promise.resolve(getToken()) : login().then(data => data.token)
 }
 
-module.exports = { getToken, setToken, clearToken, login, ensureLogin }
+module.exports = {
+  getToken,
+  setToken,
+  clearToken,
+  getAdminToken,
+  setAdminToken,
+  clearAdminToken,
+  login,
+  ensureLogin
+}
