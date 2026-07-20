@@ -1,0 +1,75 @@
+<view class="report-page">
+  <view wx:if="{{loading}}" class="state-card">
+    <view class="state-mark">◌</view>
+    <view>正在生成你的职业锚报告…</view>
+  </view>
+
+  <view wx:elif="{{error}}" class="state-card">
+    <view class="state-mark">!</view>
+    <view class="state-title">报告加载失败</view>
+    <view class="state-desc">{{error}}</view>
+    <button class="secondary-button" bindtap="home">返回首页</button>
+  </view>
+
+  <block wx:else>
+    <view class="hero">
+      <view class="hero-top">
+        <view class="eyebrow">你的首要职业锚</view>
+        <view class="save-entry" bindtap="saveLongImage">保存长图</view>
+      </view>
+      <view class="hero-title">{{report.top1.nameCn}}</view>
+      <view class="hero-en">{{report.top1.nameEn}}</view>
+      <view class="hero-tagline">{{report.top1.tagline}}</view>
+    </view>
+
+    <view class="section-card">
+      <view class="section-heading">
+        <view><view class="section-title">八维职业锚</view><view class="section-subtitle">按原始分排序 · 展示分封顶 100</view></view>
+      </view>
+      <view class="score-list">
+        <view class="score-row" wx:for="{{displayScores}}" wx:key="anchor">
+          <view class="score-meta">
+            <view class="score-name"><text class="rank {{item.top ? 'rank-top' : ''}}">{{item.rank}}</text>{{item.nameCn}}</view>
+            <view class="score-number">{{item.percent}}<text>/100</text></view>
+          </view>
+          <view class="bar-track"><view class="bar-fill {{item.barClass}}" style="width: {{item.barWidth}}%;"></view></view>
+          <view class="score-caption">原始分 {{item.raw}} · 均分 {{item.avg}}</view>
+        </view>
+      </view>
+    </view>
+
+    <view class="section-card radar-card">
+      <view class="section-title">能力倾向雷达</view>
+      <view class="section-subtitle">固定八型顺序，便于不同报告之间对照</view>
+      <canvas type="2d" id="radarCanvas" class="radar-canvas"></canvas>
+    </view>
+
+    <view class="details-title">你的 Top 3 职业锚</view>
+    <view class="profile-card tone-{{profile.tone}}" wx:for="{{topProfiles}}" wx:key="anchor" wx:for-item="profile" wx:for-index="profileIndex">
+      <view class="profile-head" data-index="{{profileIndex}}" bindtap="toggleProfile">
+        <view class="profile-rank">0{{profile.rank}}</view>
+        <view class="profile-identity">
+          <view class="profile-name">{{profile.nameCn}}</view>
+          <view class="profile-tagline">{{profile.tagline}}</view>
+        </view>
+        <view class="chevron {{profile.expanded ? 'open' : ''}}">⌄</view>
+      </view>
+      <view wx:if="{{profile.expanded}}" class="profile-body">
+        <view class="detail-section" wx:for="{{profile.sections}}" wx:key="title" wx:for-item="section">
+          <view class="detail-title">{{section.title}}</view>
+          <view class="detail-item" wx:for="{{section.items}}" wx:key="title" wx:for-item="entry">
+            <view class="detail-item-title">{{entry.title}}</view>
+            <view class="detail-item-desc">{{entry.desc}}</view>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <view class="report-footer">
+      <view class="footer-line"><text>测评编号</text><text>{{report.resultNo}}</text></view>
+      <view class="footer-line"><text>测评时间</text><text>{{report.createdAt}}</text></view>
+      <view class="footer-disclaimer">测评结果仅供个人职业探索参考，不构成任何诊断或决策依据。</view>
+    </view>
+    <button class="primary-button home-button" bindtap="home">返回首页</button>
+  </block>
+</view>

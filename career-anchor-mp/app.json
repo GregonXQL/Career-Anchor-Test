@@ -4,7 +4,7 @@
     "pages/home/index",
     "pages/invite/index",
     "pages/quiz/index",
-    "pages/result/index",
+    "pages/report/index",
     "pages/history/index"
   ],
   "window": {

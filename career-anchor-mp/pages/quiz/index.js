@@ -203,7 +203,7 @@ Page({
       wx.removeStorageSync(DRAFT_KEY)
       getApp().globalData.latestResult = result
       wx.setStorageSync('latest_result', result)
-      wx.redirectTo({ url: '/pages/result/index' })
+      wx.redirectTo({ url: `/pages/report/index?resultId=${result.id}` })
     }).catch(error => {
       wx.showModal({ title: '提交失败', content: error.message || '请稍后重试', showCancel: false })
     }).finally(() => this.setData({ submitting: false }))
