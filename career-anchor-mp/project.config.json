@@ -2,7 +2,7 @@
   "description": "施恩职业锚测评微信小程序",
   "compileType": "miniprogram",
   "libVersion": "3.5.8",
-  "appid": "wxc259a6e25701d7fa",
+  "appid": "touristappid",
   "projectname": "career-anchor-mp",
   "setting": {
     "es6": true,
