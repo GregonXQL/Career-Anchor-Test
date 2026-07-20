@@ -1,0 +1,12 @@
+<view class="page">
+  <view class="title">历史结果</view>
+  <view class="subtitle">共 {{total}} 次测评；M2 暂以简明数据展示。</view>
+  <view wx:if="{{loading}}" class="empty">加载中…</view>
+  <view wx:elif="{{records.length == 0}}" class="empty">还没有测评记录</view>
+  <view wx:else class="history-list">
+    <view class="card history-item" wx:for="{{records}}" wx:key="id" data-id="{{item.id}}" bindtap="open">
+      <view><view class="anchor">{{item.top1}}</view><view class="muted">{{item.createdAt}}</view></view>
+      <view class="more">→</view>
+    </view>
+  </view>
+</view>

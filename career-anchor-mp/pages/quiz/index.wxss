@@ -1,0 +1,25 @@
+.quiz-page { padding-bottom: 80rpx; }
+.loading { margin-top: 40vh; color: #9B9189; text-align: center; }
+.notice { margin-top: 32rpx; padding: 26rpx; border-radius: 16rpx; color: #8A6A4F; background: #F5F2ED; line-height: 1.6; }
+.disclaimer { margin-top: 24rpx; color: #9B9189; font-size: 23rpx; }
+.progress-head { display: flex; justify-content: space-between; color: #8A6A4F; font-size: 25rpx; }
+.progress { height: 12rpx; margin: 18rpx 0 32rpx; border-radius: 8rpx; overflow: hidden; background: #EDE7DE; }
+.progress-inner { height: 100%; border-radius: 8rpx; background: linear-gradient(90deg, #C0A385, #DFC9B6); transition: width .25s; }
+.question-card { position: relative; }
+.question-number { display: flex; align-items: center; justify-content: center; width: 64rpx; height: 64rpx; border-radius: 50%; color: #fff; background: linear-gradient(135deg, #C0A385, #DFC9B6); font-weight: 650; }
+.question-content { margin-top: 28rpx; font-size: 34rpx; line-height: 1.65; }
+.scale-list { margin-top: 34rpx; }
+.scale-option { display: flex; align-items: center; margin-top: 16rpx; padding: 22rpx; border: 2rpx solid #E5DED8; border-radius: 16rpx; transition: transform .15s; }
+.scale-option.selected { color: #8A6A4F; border-color: #A88066; background: #F5F2ED; transform: scale(.985); }
+.scale-value { display: flex; align-items: center; justify-content: center; width: 48rpx; height: 48rpx; margin-right: 22rpx; border-radius: 50%; background: #EDE7DE; font-weight: 650; }
+.nav-row { display: flex; gap: 20rpx; }
+.nav-button { flex: 1; }
+.boost-list { margin-top: 28rpx; }
+.boost-item { display: flex; align-items: flex-start; margin-top: 16rpx; padding: 24rpx; border: 2rpx solid #E5DED8; border-radius: 18rpx; background: #fff; }
+.boost-item.selected { border-color: #A88066; background: #F5F2ED; }
+.checkbox { flex: none; display: flex; align-items: center; justify-content: center; width: 42rpx; height: 42rpx; margin-right: 18rpx; border: 2rpx solid #A88066; border-radius: 8rpx; color: #fff; background: #fff; }
+.selected .checkbox { background: #A88066; }
+.boost-main { flex: 1; color: #8A6A4F; font-weight: 600; }
+.boost-text { margin-top: 8rpx; color: #47423E; font-size: 25rpx; font-weight: 400; line-height: 1.55; }
+.expand { padding: 30rpx; color: #8A6A4F; text-align: center; }
+.review-line { display: flex; justify-content: space-between; margin-top: 30rpx; padding-bottom: 20rpx; border-bottom: 1rpx solid #EDE7DE; }

@@ -1,0 +1,5 @@
+.history-list { margin-top: 28rpx; }
+.history-item { display: flex; align-items: center; justify-content: space-between; margin-top: 18rpx; }
+.anchor { margin-bottom: 10rpx; color: #8A6A4F; font-size: 32rpx; font-weight: 650; }
+.more { color: #A88066; font-size: 40rpx; }
+.empty { padding: 140rpx 0; color: #9B9189; text-align: center; }

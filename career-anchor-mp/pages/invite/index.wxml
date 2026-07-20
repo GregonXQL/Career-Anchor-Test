@@ -1,0 +1,9 @@
+<view class="page invite-page">
+  <view class="title">输入邀请码</view>
+  <view class="subtitle">请输入收到的 8 位邀请码，验证通过后即可开始测评。</view>
+  <view class="code-wrap {{shaking ? 'shake' : ''}}">
+    <view class="slot {{item ? 'filled' : ''}}" wx:for="{{slots}}" wx:key="index">{{item}}</view>
+    <input class="hidden-input" value="{{code}}" maxlength="8" focus bindinput="input" />
+  </view>
+  <button class="primary-button" loading="{{loading}}" bindtap="verify">验证并继续</button>
+</view>

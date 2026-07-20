@@ -1,0 +1,4 @@
+.launch { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; background: #fff; }
+.mark { display: flex; align-items: center; justify-content: center; width: 168rpx; height: 168rpx; margin-bottom: 48rpx; border-radius: 50%; color: #fff; font-size: 52rpx; font-weight: 700; background: linear-gradient(135deg, #C0A385, #DFC9B6); box-shadow: 0 20rpx 50rpx rgba(168,128,102,.25); }
+.enter { width: 100%; margin-top: 72rpx; }
+.admin-entry { position: absolute; bottom: 44rpx; color: #C0B6AD; font-size: 24rpx; }

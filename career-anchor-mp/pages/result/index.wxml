@@ -1,0 +1,9 @@
+<view class="page">
+  <view class="card result-head">
+    <view class="eyebrow">本次职业锚</view>
+    <view class="title">{{result.top3[0]}}</view>
+    <view class="subtitle">完整可视化报告将在 M3 呈现，当前先展示服务端返回的 JSON 结果。</view>
+  </view>
+  <view class="json-card"><text selectable="true">{{json}}</text></view>
+  <button class="primary-button" bindtap="home">返回首页</button>
+</view>

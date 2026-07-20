@@ -3,4 +3,5 @@
 /.idea/
 *.iml
 *.log
+/logs/
 .env

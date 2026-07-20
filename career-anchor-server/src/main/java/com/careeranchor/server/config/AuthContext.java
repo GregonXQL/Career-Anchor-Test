@@ -3,7 +3,7 @@ package com.careeranchor.server.config;
 import com.careeranchor.server.enums.Role;
 
 public final class AuthContext {
-    public static final String ATTRIBUTE = AuthContext.class.getName() + ".principal";
+    public static final String ATTRIBUTE = "authPrincipal";
 
     private AuthContext() {}
 

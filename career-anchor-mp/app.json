@@ -1,0 +1,18 @@
+{
+  "pages": [
+    "pages/launch/index",
+    "pages/home/index",
+    "pages/invite/index",
+    "pages/quiz/index",
+    "pages/result/index",
+    "pages/history/index"
+  ],
+  "window": {
+    "navigationBarTitleText": "职业锚测评",
+    "navigationBarBackgroundColor": "#FFFFFF",
+    "navigationBarTextStyle": "black",
+    "backgroundColor": "#F5F2ED"
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json"
+}

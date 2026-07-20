@@ -1,0 +1,7 @@
+.invite-page { background: #fff; }
+.code-wrap { position: relative; display: flex; justify-content: space-between; margin-top: 72rpx; }
+.slot { display: flex; align-items: center; justify-content: center; width: 68rpx; height: 84rpx; border: 2rpx solid #D8D0C9; border-radius: 12rpx; color: #8A6A4F; font-size: 34rpx; font-weight: 650; }
+.slot.filled { border-color: #A88066; background: #F5F2ED; }
+.hidden-input { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; }
+.shake { animation: shake .4s ease; }
+@keyframes shake { 0%,100% { transform: translateX(0); } 25% { transform: translateX(-12rpx); } 75% { transform: translateX(12rpx); } }

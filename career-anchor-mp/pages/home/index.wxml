@@ -1,0 +1,20 @@
+<view class="page home">
+  <view class="greeting">你好，欢迎回来</view>
+  <view class="title">今天，重新认识自己的职业选择</view>
+
+  <view class="start-card" bindtap="start">
+    <view class="card-title">开始测评</view>
+    <view class="card-desc">约 8 分钟 · 40 题</view>
+    <view class="arrow">→</view>
+  </view>
+
+  <view class="card history-card" bindtap="history">
+    <view>
+      <view class="history-title">历史报告</view>
+      <view class="muted">回看过往测评结果</view>
+    </view>
+    <view class="count">{{resultCount}}</view>
+  </view>
+
+  <view class="disclaimer">测评结果仅供参考，不构成任何诊断或决策依据</view>
+</view>

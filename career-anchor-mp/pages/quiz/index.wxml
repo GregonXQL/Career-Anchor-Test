@@ -1,0 +1,55 @@
+<view class="page quiz-page">
+  <view wx:if="{{phase == 'loading'}}" class="loading">正在验证邀请并加载题目…</view>
+
+  <view wx:elif="{{phase == 'intro'}}" class="card intro">
+    <view class="title">测评说明</view>
+    <view class="subtitle">你将回答 40 道职业描述题，预计需要 8 分钟。请按日常真实想法选择 1–6 分；除非非常明确，不必刻意选择 1 或 6。</view>
+    <view class="notice">全部作答后，还需选出最符合自己的 3 道题，每题将获得 +{{config.boostValue}} 附加分。</view>
+    <view class="disclaimer">测评结果仅供参考，不构成任何诊断或决策依据。</view>
+    <button class="primary-button" bindtap="startQuiz">开始答题</button>
+  </view>
+
+  <view wx:elif="{{phase == 'quiz'}}">
+    <view class="progress-head">
+      <text>第 {{currentIndex + 1}} / {{questions.length}} 题</text>
+      <text>{{progress}}%</text>
+    </view>
+    <view class="progress"><view class="progress-inner" style="width: {{progress}}%;"></view></view>
+    <view class="card question-card">
+      <view class="question-number">{{currentQuestion.id}}</view>
+      <view class="question-content">{{currentQuestion.content}}</view>
+      <view class="scale-list">
+        <view class="scale-option {{currentAnswer == item.value ? 'selected' : ''}}" wx:for="{{scaleOptions}}" wx:key="value" data-value="{{item.value}}" bindtap="selectAnswer">
+          <view class="scale-value">{{item.value}}</view>
+          <view>{{item.label}}</view>
+        </view>
+      </view>
+    </view>
+    <view class="nav-row">
+      <button class="secondary-button nav-button" disabled="{{currentIndex == 0}}" bindtap="previous">上一题</button>
+      <button class="secondary-button nav-button" bindtap="next">下一题</button>
+    </view>
+  </view>
+
+  <view wx:elif="{{phase == 'boost'}}">
+    <view class="title">选出最像你的 3 题</view>
+    <view class="subtitle">已选 {{boosted.length}} / {{config.boostCount}}，每题额外 +{{config.boostValue}} 分。</view>
+    <view class="boost-list">
+      <view class="boost-item {{item.selected ? 'selected' : ''}}" wx:for="{{boostCandidates}}" wx:key="id" data-id="{{item.id}}" bindtap="toggleBoost">
+        <view class="checkbox">{{item.selected ? '✓' : ''}}</view>
+        <view class="boost-main"><view>第 {{item.id}} 题 · 原评分 {{item.score}}</view><view class="boost-text">{{item.content}}</view></view>
+      </view>
+    </view>
+    <view class="expand" bindtap="toggleExpand">{{expandAll ? '只看高分题' : '展开全部题目'}}</view>
+    <button class="primary-button" bindtap="review">确认选择</button>
+  </view>
+
+  <view wx:elif="{{phase == 'review'}}" class="card review">
+    <view class="title">确认提交</view>
+    <view class="review-line"><text>已答题目</text><text>40 / 40</text></view>
+    <view class="review-line"><text>附加题</text><text>{{boostedText}}</text></view>
+    <view class="subtitle">提交后邀请码才会被正式消耗，结果由服务端计算并保存。</view>
+    <button class="primary-button" loading="{{submitting}}" bindtap="submit">提交测评</button>
+    <button class="secondary-button" bindtap="backToBoost">返回修改</button>
+  </view>
+</view>
