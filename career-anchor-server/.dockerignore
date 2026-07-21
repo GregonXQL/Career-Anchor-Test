@@ -1,0 +1,10 @@
+target/
+.git/
+.idea/
+*.iml
+*.log
+logs/
+.env
+compose.yml
+postman/
+src/test/
