@@ -1,5 +1,11 @@
 <view class="page quiz-page">
-  <view wx:if="{{phase == 'loading'}}" class="loading">正在验证邀请并加载题目…</view>
+  <view wx:if="{{phase == 'loading'}}" class="quiz-skeleton card">
+    <view class="skeleton skeleton-line short"></view>
+    <view class="skeleton skeleton-line"></view>
+    <view class="skeleton skeleton-line medium"></view>
+    <view class="skeleton skeleton-notice"></view>
+    <view class="loading-caption">正在验证邀请并加载题目…</view>
+  </view>
 
   <view wx:elif="{{phase == 'intro'}}" class="card intro">
     <view class="title">测评说明</view>

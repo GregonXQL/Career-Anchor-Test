@@ -1,5 +1,10 @@
 .quiz-page { padding-bottom: 80rpx; }
 .loading { margin-top: 40vh; color: #9B9189; text-align: center; }
+.quiz-skeleton { margin-top: 15vh; }
+.quiz-skeleton .skeleton-line { margin-top: 26rpx; }
+.quiz-skeleton .skeleton-line:first-child { height: 42rpx; margin-top: 0; }
+.skeleton-notice { height: 150rpx; margin-top: 44rpx; border-radius: 18rpx; }
+.loading-caption { margin-top: 34rpx; color: #9B9189; font-size: 24rpx; text-align: center; }
 .notice { margin-top: 32rpx; padding: 26rpx; border-radius: 16rpx; color: #8A6A4F; background: #F5F2ED; line-height: 1.6; }
 .disclaimer { margin-top: 24rpx; color: #9B9189; font-size: 23rpx; }
 .progress-head { display: flex; justify-content: space-between; color: #8A6A4F; font-size: 25rpx; }

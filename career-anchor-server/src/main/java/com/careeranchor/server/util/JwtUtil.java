@@ -5,6 +5,7 @@ import com.careeranchor.server.enums.Role;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
@@ -13,6 +14,7 @@ import java.time.Instant;
 import java.util.Date;
 
 @Component
+@DependsOn("productionConfigurationValidator")
 public class JwtUtil {
     private final SecretKey key;
     private final AppProperties.Jwt properties;

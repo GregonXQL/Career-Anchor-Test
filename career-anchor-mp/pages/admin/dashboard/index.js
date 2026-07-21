@@ -74,6 +74,12 @@ Page({
       .catch(error => this.setData({ loading: false, error: error.message || '概览加载失败' }))
   },
 
+  retryCurrent() {
+    if (this.data.tab === 'overview') this.loadStats()
+    if (this.data.tab === 'results') this.loadResults(true)
+    if (this.data.tab === 'invites') this.loadInvites(true)
+  },
+
   loadResults(reset) {
     const page = reset ? 1 : this.data.resultPage + 1
     this.setData({ loading: true, error: '' })

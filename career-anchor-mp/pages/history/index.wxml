@@ -5,9 +5,13 @@
     <view wx:if="{{total > 0}}" class="total-pill">累计 {{total}} 次</view>
   </view>
 
-  <view wx:if="{{loading && records.length == 0}}" class="state-card">
-    <view class="state-mark">◌</view>
-    <view>正在整理历史报告…</view>
+  <view wx:if="{{loading && records.length == 0}}" class="history-skeleton">
+    <view class="history-card skeleton-card" wx:for="{{[1, 2, 3]}}" wx:key="*this">
+      <view class="skeleton skeleton-line medium"></view>
+      <view class="skeleton skeleton-line short"></view>
+      <view class="skeleton skeleton-line"></view>
+    </view>
+    <view class="load-more">正在整理历史报告…</view>
   </view>
 
   <view wx:elif="{{error && records.length == 0}}" class="state-card">

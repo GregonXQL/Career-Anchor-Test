@@ -67,3 +67,26 @@ page {
 .muted {
   color: var(--muted);
 }
+
+.skeleton {
+  position: relative;
+  overflow: hidden;
+  background: #E9E3DC;
+}
+
+.skeleton::after {
+  position: absolute;
+  inset: 0;
+  content: '';
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.72), transparent);
+  transform: translateX(-100%);
+  animation: skeleton-shimmer 1.25s ease-in-out infinite;
+}
+
+.skeleton-line { height: 24rpx; border-radius: 999rpx; }
+.skeleton-line.short { width: 42%; }
+.skeleton-line.medium { width: 68%; }
+
+@keyframes skeleton-shimmer {
+  to { transform: translateX(100%); }
+}

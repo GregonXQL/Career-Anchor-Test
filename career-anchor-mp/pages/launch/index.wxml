@@ -3,5 +3,19 @@
   <view class="title">找到你的职业锚</view>
   <view class="subtitle">理解内心真正看重的职业价值，让每一次选择更笃定。</view>
   <button class="primary-button enter" loading="{{loading}}" bindtap="enter">微信一键进入</button>
+  <view wx:if="{{privacyError && !privacyVisible}}" class="privacy-hint">{{privacyError}}</view>
   <view class="admin-entry" bindtap="admin">管理员入口</view>
+
+  <view wx:if="{{privacyVisible}}" class="privacy-mask">
+    <view class="privacy-dialog">
+      <view class="privacy-title">隐私保护提示</view>
+      <view class="privacy-copy">为了完成微信登录、保存测评进度并生成历史报告，我们会处理你的微信身份标识、测评作答与结果数据。数据仅用于提供本小程序服务。</view>
+      <view class="privacy-link" bindtap="openPrivacyContract">查看《用户隐私保护指引》</view>
+      <view wx:if="{{privacyError}}" class="privacy-error">{{privacyError}}</view>
+      <view class="privacy-actions">
+        <button class="privacy-reject" bindtap="rejectPrivacy">不同意</button>
+        <button class="privacy-agree" loading="{{loading}}" bindtap="agreePrivacy">同意并继续</button>
+      </view>
+    </view>
+  </view>
 </view>

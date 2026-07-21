@@ -1,4 +1,16 @@
 .launch { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; background: #fff; }
 .mark { display: flex; align-items: center; justify-content: center; width: 168rpx; height: 168rpx; margin-bottom: 48rpx; border-radius: 50%; color: #fff; font-size: 52rpx; font-weight: 700; background: linear-gradient(135deg, #C0A385, #DFC9B6); box-shadow: 0 20rpx 50rpx rgba(168,128,102,.25); }
 .enter { width: 100%; margin-top: 72rpx; }
+.privacy-hint { margin-top: 24rpx; color: #9B6A5E; font-size: 23rpx; line-height: 1.6; }
 .admin-entry { position: absolute; bottom: 44rpx; color: #C0B6AD; font-size: 24rpx; }
+.privacy-mask { position: fixed; z-index: 100; inset: 0; display: flex; align-items: center; justify-content: center; padding: 44rpx; background: rgba(40, 36, 33, .58); text-align: left; }
+.privacy-dialog { width: 100%; padding: 42rpx 36rpx 34rpx; border-radius: 28rpx; background: #fff; box-shadow: 0 24rpx 70rpx rgba(40,36,33,.2); }
+.privacy-title { color: #8A6A4F; font-size: 36rpx; font-weight: 700; }
+.privacy-copy { margin-top: 24rpx; color: #625A54; font-size: 27rpx; line-height: 1.75; }
+.privacy-link { display: inline-block; margin-top: 20rpx; color: #A88066; font-size: 25rpx; text-decoration: underline; }
+.privacy-error { margin-top: 18rpx; color: #A35245; font-size: 23rpx; line-height: 1.5; }
+.privacy-actions { display: flex; gap: 18rpx; margin-top: 34rpx; }
+.privacy-actions button { flex: 1; margin: 0; border: 0; border-radius: 999rpx; font-size: 27rpx; }
+.privacy-actions button::after { border: 0; }
+.privacy-reject { color: #7C7169; background: #EDE7DE; }
+.privacy-agree { color: #fff; background: linear-gradient(135deg, #A88066, #DFC9B6); }

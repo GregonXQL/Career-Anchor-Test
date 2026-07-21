@@ -1,7 +1,15 @@
 <view class="report-page">
-  <view wx:if="{{loading}}" class="state-card">
-    <view class="state-mark">◌</view>
-    <view>正在生成你的职业锚报告…</view>
+  <view wx:if="{{loading}}" class="report-skeleton">
+    <view class="skeleton skeleton-hero"></view>
+    <view class="section-card">
+      <view class="skeleton skeleton-line short"></view>
+      <view class="skeleton skeleton-score" wx:for="{{[1, 2, 3, 4]}}" wx:key="*this"></view>
+    </view>
+    <view class="section-card">
+      <view class="skeleton skeleton-line medium"></view>
+      <view class="skeleton skeleton-radar"></view>
+    </view>
+    <view class="loading-caption">正在生成你的职业锚报告…</view>
   </view>
 
   <view wx:elif="{{error}}" class="state-card">
@@ -39,7 +47,7 @@
     </view>
 
     <view class="section-card radar-card">
-      <view class="section-title">能力倾向雷达</view>
+      <view class="section-title">职业价值雷达</view>
       <view class="section-subtitle">固定八型顺序，便于不同报告之间对照</view>
       <canvas type="2d" id="radarCanvas" class="radar-canvas"></canvas>
     </view>

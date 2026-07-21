@@ -13,7 +13,8 @@
       <view class="history-title">历史报告</view>
       <view class="muted">回看过往测评结果</view>
     </view>
-    <view class="count">{{resultCount}}</view>
+    <view wx:if="{{countLoading}}" class="count count-skeleton skeleton"></view>
+    <view wx:else class="count">{{resultCount}}</view>
   </view>
 
   <view class="disclaimer">测评结果仅供参考，不构成任何诊断或决策依据</view>

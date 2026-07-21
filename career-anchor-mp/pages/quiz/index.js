@@ -1,5 +1,6 @@
 const auth = require('../../utils/auth')
 const request = require('../../utils/request')
+const privacy = require('../../utils/privacy')
 const { parseInviteOptions } = require('../../utils/invite')
 
 const DRAFT_KEY = 'quiz_draft'
@@ -27,6 +28,12 @@ Page({
     const inviteCode = parseInviteOptions(options)
     if (!inviteCode) {
       this.exitWithError('邀请二维码或邀请码格式不正确')
+      return
+    }
+    if (!privacy.hasAccepted()) {
+      wx.redirectTo({
+        url: `/pages/launch/index?redirect=quiz&inviteCode=${encodeURIComponent(inviteCode)}`
+      })
       return
     }
     this.pendingDraft = null

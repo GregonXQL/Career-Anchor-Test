@@ -10,6 +10,10 @@
 .empty-orbit::after { content: ''; position: absolute; top: 68rpx; left: -18rpx; width: 184rpx; height: 18rpx; border-top: 2rpx solid #c0a385; border-radius: 50%; transform: rotate(-24deg); }
 .empty-core { position: absolute; top: 39rpx; left: 39rpx; z-index: 1; width: 72rpx; height: 72rpx; border-radius: 50%; color: #fff; background: linear-gradient(135deg,#a88066,#dfc9b6); font-size: 30rpx; line-height: 72rpx; }
 .history-list { margin-top: 12rpx; }
+.history-skeleton { margin-top: 12rpx; }
+.skeleton-card { border-left-color: #D8CEC4; }
+.skeleton-card .skeleton-line { margin-top: 28rpx; }
+.skeleton-card .skeleton-line:first-child { height: 32rpx; margin-top: 0; }
 .history-card { position: relative; margin-top: 22rpx; padding: 30rpx; overflow: hidden; border-radius: 24rpx; border-left: 8rpx solid #a88066; background: #fff; box-shadow: 0 10rpx 32rpx rgba(71,66,62,.07); }
 .tone-deep { border-left-color: #765844; } .tone-copper { border-left-color: #a4755f; } .tone-champagne { border-left-color: #c0a385; } .tone-clay { border-left-color: #b08d7a; } .tone-taupe { border-left-color: #9b9189; } .tone-sand { border-left-color: #c7b39e; } .tone-oat { border-left-color: #d3c8bb; }
 .card-top { display: flex; justify-content: space-between; align-items: flex-start; }

@@ -4,11 +4,20 @@
     <view class="logout" bindtap="logout">退出管理</view>
   </view>
 
-  <view wx:if="{{error}}" class="error-card">{{error}}</view>
+  <view wx:if="{{error}}" class="error-card">
+    <view>{{error}}</view>
+    <view class="retry-link" bindtap="retryCurrent">重新加载</view>
+  </view>
 
   <block wx:if="{{tab === 'overview'}}">
     <view class="panel-heading"><view class="panel-title">数据概览</view><view class="panel-desc">实时汇总当前测评业务数据</view></view>
-    <view wx:if="{{stats}}" class="stats-grid">
+    <view wx:if="{{loading && !stats}}" class="stats-grid">
+      <view class="stat-card" wx:for="{{[1, 2, 3, 4]}}" wx:key="*this">
+        <view class="skeleton stat-number-skeleton"></view>
+        <view class="skeleton skeleton-line medium stat-label-skeleton"></view>
+      </view>
+    </view>
+    <view wx:elif="{{stats}}" class="stats-grid">
       <view class="stat-card"><view class="stat-number">{{stats.totalResults}}</view><view class="stat-label">测评总数</view></view>
       <view class="stat-card accent"><view class="stat-number">{{stats.todayResults}}</view><view class="stat-label">今日测评</view></view>
       <view class="stat-card"><view class="stat-number">{{stats.totalUsers}}</view><view class="stat-label">用户总数</view></view>
@@ -28,7 +37,17 @@
       </view>
       <view class="filter-actions"><view class="text-action" bindtap="clearDates">清除日期</view><button class="mini-primary" bindtap="searchResults">查询</button></view>
     </view>
-    <view wx:if="{{!loading && !results.length}}" class="empty">暂无符合条件的测评结果</view>
+    <view wx:if="{{loading && !results.length}}" class="admin-skeleton-list">
+      <view class="result-card" wx:for="{{[1, 2, 3]}}" wx:key="*this">
+        <view class="skeleton skeleton-line medium"></view>
+        <view class="skeleton result-anchor-skeleton"></view>
+        <view class="skeleton skeleton-line short"></view>
+      </view>
+    </view>
+    <view wx:elif="{{!error && !results.length}}" class="empty">
+      <view class="empty-mark">锚</view>
+      <view>暂无符合条件的测评结果</view>
+    </view>
     <view class="result-card" wx:for="{{results}}" wx:key="id" data-id="{{item.id}}" bindtap="openResult">
       <view class="result-top"><view class="result-user">{{item.userLabel}}</view><view class="result-id">#{{item.id}}</view></view>
       <view class="result-anchor">{{item.top1Name}}</view>
@@ -71,7 +90,17 @@
       </view>
     </scroll-view>
     <view class="invite-summary">共 {{inviteTotal}} 个</view>
-    <view wx:if="{{!loading && !invites.length}}" class="empty">暂无邀请码</view>
+    <view wx:if="{{loading && !invites.length}}" class="admin-skeleton-list">
+      <view class="invite-card" wx:for="{{[1, 2, 3]}}" wx:key="*this">
+        <view class="skeleton skeleton-line medium"></view>
+        <view class="skeleton skeleton-line"></view>
+        <view class="skeleton skeleton-line short"></view>
+      </view>
+    </view>
+    <view wx:elif="{{!error && !invites.length}}" class="empty">
+      <view class="empty-mark">码</view>
+      <view>{{inviteStatus === 'ALL' ? '还没有邀请码，可先在上方生成' : '当前筛选下没有邀请码'}}</view>
+    </view>
     <view class="invite-card" wx:for="{{invites}}" wx:key="id">
       <view class="invite-top">
         <view class="invite-code" data-code="{{item.code}}" bindtap="copyCode">{{item.code}}</view>
@@ -86,7 +115,7 @@
     </view>
   </block>
 
-  <view wx:if="{{loading}}" class="loading">加载中…</view>
+  <view wx:if="{{loading && ((tab === 'results' && results.length) || (tab === 'invites' && invites.length))}}" class="loading">正在加载更多…</view>
 
   <view class="bottom-tabs">
     <view class="tab-item {{tab === 'overview' ? 'active' : ''}}" data-tab="overview" bindtap="switchTab"><view class="tab-icon">◫</view><view>概览</view></view>
