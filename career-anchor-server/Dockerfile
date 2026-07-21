@@ -15,6 +15,7 @@ RUN addgroup -S app && adduser -S app -G app
 WORKDIR /app
 
 COPY --from=build --chown=app:app /workspace/target/career-anchor-server-*.jar /app/app.jar
+RUN mkdir -p /app/logs && chown -R app:app /app
 
 USER app
 ENV SERVER_PORT=8080 \
