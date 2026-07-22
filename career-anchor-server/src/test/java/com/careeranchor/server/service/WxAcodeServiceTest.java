@@ -15,12 +15,14 @@ import java.util.List;
 import java.nio.ByteBuffer;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.mock;
 import static org.springframework.test.web.client.ExpectedCount.once;
 import static org.springframework.test.web.client.ExpectedCount.twice;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.method;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
+import static org.springframework.test.web.client.response.MockRestResponseCreators.withBadRequest;
 import static org.springframework.http.HttpMethod.POST;
 
 class WxAcodeServiceTest {
@@ -82,6 +84,27 @@ class WxAcodeServiceTest {
         WxAcodeService service = new WxAcodeService(builder.build(), new ObjectMapper(), properties, Clock.systemUTC());
 
         assertThat(service.generate("M3TEST88")).startsWith("data:image/png;base64,");
+        server.verify();
+    }
+
+    @Test
+    void cloudRunModeReturnsWechatErrorDetailsToTheAdmin() {
+        RestClient.Builder builder = RestClient.builder();
+        MockRestServiceServer server = MockRestServiceServer.bindTo(builder).build();
+        server.expect(once(), requestTo("http://api.weixin.qq.com/wxa/getwxacodeunlimit"))
+                .andRespond(withBadRequest()
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .body("{\"errcode\":41030,\"errmsg\":\"invalid page\"}"));
+        AppProperties properties = new AppProperties(
+                new AppProperties.Jwt("test-secret-must-be-at-least-thirty-two-bytes", java.time.Duration.ofDays(7), java.time.Duration.ofHours(2)),
+                new AppProperties.Wechat("", "", false, true, "http://api.weixin.qq.com", "trial", true),
+                new AppProperties.Admin(""),
+                new AppProperties.Assessment(6, List.of(), 3, 4));
+        WxAcodeService service = new WxAcodeService(builder.build(), new ObjectMapper(), properties, Clock.systemUTC());
+
+        assertThatThrownBy(() -> service.generate("M3TEST88"))
+                .hasMessageContaining("errcode=41030")
+                .hasMessageContaining("invalid page");
         server.verify();
     }
 }

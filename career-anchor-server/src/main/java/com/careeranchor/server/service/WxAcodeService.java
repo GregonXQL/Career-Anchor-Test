@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
+import org.springframework.web.client.RestClientResponseException;
 
 import java.io.IOException;
 import java.io.ByteArrayOutputStream;
@@ -68,13 +69,19 @@ public class WxAcodeService {
                             "env_version", properties.acodeEnvVersion()))
                     .retrieve()
                     .body(byte[].class);
+        } catch (RestClientResponseException exception) {
+            String detail = responseDetail(exception.getResponseBodyAsByteArray());
+            log.warn("WeChat mini program code request failed with HTTP {}: {}", exception.getStatusCode(), detail);
+            throw acodeFailure(detail);
         } catch (RuntimeException exception) {
             log.warn("WeChat mini program code request failed", exception);
-            throw new BizException(ErrorCode.WECHAT_ACODE_FAILED);
+            String detail = properties.cloudCallEnabled() ? "无法连接微信云调用代理" : "无法连接微信服务";
+            throw acodeFailure(detail);
         }
         if (response == null || response.length < 8 || isJson(response)) {
-            log.warn("WeChat mini program code returned an invalid response: {}", responseDetail(response));
-            throw new BizException(ErrorCode.WECHAT_ACODE_FAILED);
+            String detail = responseDetail(response);
+            log.warn("WeChat mini program code returned an invalid response: {}", detail);
+            throw acodeFailure(detail);
         }
         return response;
     }
@@ -137,6 +144,10 @@ public class WxAcodeService {
         } catch (IOException ignored) {
             return "unexpected response, bytes=" + response.length;
         }
+    }
+
+    private BizException acodeFailure(String detail) {
+        return new BizException(ErrorCode.WECHAT_ACODE_FAILED, "微信小程序码生成失败：" + detail);
     }
 
     private byte[] mockPng(String code) {
