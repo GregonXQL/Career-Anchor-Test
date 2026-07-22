@@ -1,4 +1,4 @@
-const { baseUrl } = require('./config')
+const callContainer = require('./cloud')
 
 const TOKEN_KEY = 'auth_token'
 const ADMIN_TOKEN_KEY = 'admin_token'
@@ -36,21 +36,20 @@ function login() {
           reject(new Error('微信登录未返回 code'))
           return
         }
-        wx.request({
-          url: `${baseUrl}/auth/wx-login`,
+        callContainer({
+          url: '/auth/wx-login',
           method: 'POST',
-          data: { code: loginResult.code },
-          success(response) {
-            const body = response.data || {}
-            if (response.statusCode >= 200 && response.statusCode < 300 && body.code === 0) {
-              setToken(body.data.token)
-              resolve(body.data)
-              return
-            }
-            reject(new Error(body.msg || '登录失败'))
-          },
-          fail: reject
+          data: { code: loginResult.code }
+        }).then(response => {
+          const body = response.data || {}
+          if (response.statusCode >= 200 && response.statusCode < 300 && body.code === 0) {
+            setToken(body.data.token)
+            resolve(body.data)
+            return
+          }
+          reject(new Error(body.msg || '登录失败'))
         })
+          .catch(reject)
       },
       fail: reject
     })

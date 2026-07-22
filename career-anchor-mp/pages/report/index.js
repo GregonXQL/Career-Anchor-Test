@@ -87,8 +87,7 @@ Page({
       if (!target || !target.node || !target.width || this.destroyed) return
       const canvas = target.node
       const context = canvas.getContext('2d')
-      const system = wx.getWindowInfo ? wx.getWindowInfo() : wx.getSystemInfoSync()
-      const pixelRatio = system.pixelRatio || 1
+      const { pixelRatio = 1 } = wx.getWindowInfo()
       canvas.width = target.width * pixelRatio
       canvas.height = target.height * pixelRatio
       context.scale(pixelRatio, pixelRatio)
