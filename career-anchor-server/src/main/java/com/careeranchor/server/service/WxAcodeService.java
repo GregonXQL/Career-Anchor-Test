@@ -5,6 +5,8 @@ import com.careeranchor.server.enums.ErrorCode;
 import com.careeranchor.server.exception.BizException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
@@ -24,6 +26,7 @@ import java.util.zip.DeflaterOutputStream;
 @Service
 public class WxAcodeService {
     private static final long REFRESH_ADVANCE_SECONDS = 300;
+    private static final Logger log = LoggerFactory.getLogger(WxAcodeService.class);
 
     private final RestClient restClient;
     private final ObjectMapper objectMapper;
@@ -46,12 +49,17 @@ public class WxAcodeService {
     }
 
     private byte[] requestPng(String inviteCode) {
-        requireCredentials();
-        String token = accessToken();
+        String endpoint;
+        if (properties.cloudCallEnabled()) {
+            endpoint = properties.apiBaseUrl() + "/wxa/getwxacodeunlimit";
+        } else {
+            requireCredentials();
+            endpoint = properties.apiBaseUrl() + "/wxa/getwxacodeunlimit?access_token=" + accessToken();
+        }
         byte[] response;
         try {
             response = restClient.post()
-                    .uri(properties.apiBaseUrl() + "/wxa/getwxacodeunlimit?access_token=" + token)
+                    .uri(endpoint)
                     .contentType(MediaType.APPLICATION_JSON)
                     .body(Map.of(
                             "scene", "i=" + inviteCode,
@@ -61,9 +69,11 @@ public class WxAcodeService {
                     .retrieve()
                     .body(byte[].class);
         } catch (RuntimeException exception) {
+            log.warn("WeChat mini program code request failed", exception);
             throw new BizException(ErrorCode.WECHAT_ACODE_FAILED);
         }
         if (response == null || response.length < 8 || isJson(response)) {
+            log.warn("WeChat mini program code returned an invalid response: {}", responseDetail(response));
             throw new BizException(ErrorCode.WECHAT_ACODE_FAILED);
         }
         return response;
@@ -116,6 +126,16 @@ public class WxAcodeService {
             return error.has("errcode");
         } catch (IOException ignored) {
             return true;
+        }
+    }
+
+    private String responseDetail(byte[] response) {
+        if (response == null) return "empty response";
+        try {
+            JsonNode json = objectMapper.readTree(response);
+            return "errcode=" + json.path("errcode").asText() + ", errmsg=" + json.path("errmsg").asText();
+        } catch (IOException ignored) {
+            return "unexpected response, bytes=" + response.length;
         }
     }
 

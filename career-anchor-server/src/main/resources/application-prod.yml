@@ -22,3 +22,5 @@ app:
     app-id: ${WECHAT_APP_ID:}
     app-secret: ${WECHAT_APP_SECRET:}
     mock-enabled: false
+    cloud-call-enabled: ${WECHAT_CLOUD_CALL_ENABLED:true}
+    api-base-url: ${WECHAT_API_BASE_URL:http://api.weixin.qq.com}

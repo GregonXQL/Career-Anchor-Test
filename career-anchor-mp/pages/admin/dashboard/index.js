@@ -4,6 +4,18 @@ const { resultViews, inviteViews, resultQuery } = require('../../../utils/admin-
 
 const PAGE_SIZE = 10
 
+function copyText(data) {
+  if (!data) {
+    wx.showToast({ title: '没有可复制的内容', icon: 'none' })
+    return
+  }
+  wx.setClipboardData({
+    data,
+    success: () => wx.showToast({ title: '已复制', icon: 'success' }),
+    fail: error => wx.showToast({ title: error.errMsg || '复制失败', icon: 'none' })
+  })
+}
+
 Page({
   data: {
     tab: 'overview',
@@ -165,7 +177,7 @@ Page({
   },
 
   copyCreated() {
-    wx.setClipboardData({ data: this.data.createdCodes.join('\n') })
+    copyText(this.data.createdCodes.join('\n'))
   },
 
   createQr() {
@@ -191,7 +203,7 @@ Page({
   },
 
   copyCode(event) {
-    wx.setClipboardData({ data: event.currentTarget.dataset.code })
+    copyText(event.currentTarget.dataset.code)
   },
 
   generateQr(event) {

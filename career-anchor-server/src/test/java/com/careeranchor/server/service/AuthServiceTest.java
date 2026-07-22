@@ -32,7 +32,7 @@ class AuthServiceTest {
         JwtUtil jwtUtil = mock(JwtUtil.class);
         AppProperties properties = new AppProperties(
                 new AppProperties.Jwt("test-secret-must-be-at-least-thirty-two-bytes", Duration.ofDays(7), Duration.ofHours(2)),
-                new AppProperties.Wechat("wx-test-app", "secret", false, "https://api.weixin.qq.com", "trial", false),
+                new AppProperties.Wechat("wx-test-app", "secret", false, false, "https://api.weixin.qq.com", "trial", false),
                 new AppProperties.Admin(""),
                 new AppProperties.Assessment(6, List.of(), 3, 4));
 

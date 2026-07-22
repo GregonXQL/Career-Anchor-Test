@@ -31,6 +31,7 @@ app:
     app-id: ${WECHAT_APP_ID:}
     app-secret: ${WECHAT_APP_SECRET:}
     mock-enabled: false
+    cloud-call-enabled: false
     api-base-url: ${WECHAT_API_BASE_URL:https://api.weixin.qq.com}
     acode-env-version: ${WECHAT_ACODE_ENV_VERSION:release}
     acode-check-path: ${WECHAT_ACODE_CHECK_PATH:true}

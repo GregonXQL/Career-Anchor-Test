@@ -28,7 +28,7 @@ class WxAcodeServiceTest {
     void developmentModeReturnsAValidPngDataUrlWithoutCallingWechat() throws Exception {
         AppProperties properties = new AppProperties(
                 new AppProperties.Jwt("test-secret-must-be-at-least-thirty-two-bytes", java.time.Duration.ofDays(7), java.time.Duration.ofHours(2)),
-                new AppProperties.Wechat("", "", true, "https://api.weixin.qq.com", "develop", false),
+                new AppProperties.Wechat("", "", true, false, "https://api.weixin.qq.com", "develop", false),
                 new AppProperties.Admin(""),
                 new AppProperties.Assessment(6, List.of(), 3, 4));
         WxAcodeService service = new WxAcodeService(mock(RestClient.class), new ObjectMapper(), properties, Clock.systemUTC());
@@ -54,7 +54,7 @@ class WxAcodeServiceTest {
                 .andRespond(withSuccess(png, MediaType.IMAGE_PNG));
         AppProperties properties = new AppProperties(
                 new AppProperties.Jwt("test-secret-must-be-at-least-thirty-two-bytes", java.time.Duration.ofDays(7), java.time.Duration.ofHours(2)),
-                new AppProperties.Wechat("app", "secret", false, "https://api.weixin.qq.com", "trial", false),
+                new AppProperties.Wechat("app", "secret", false, false, "https://api.weixin.qq.com", "trial", false),
                 new AppProperties.Admin(""),
                 new AppProperties.Assessment(6, List.of(), 3, 4));
         WxAcodeService service = new WxAcodeService(builder.build(), new ObjectMapper(), properties,
@@ -62,6 +62,26 @@ class WxAcodeServiceTest {
 
         assertThat(service.generate("M3TEST88")).startsWith("data:image/png;base64,");
         assertThat(service.generate("M3TEST89")).startsWith("data:image/png;base64,");
+        server.verify();
+    }
+
+    @Test
+    void cloudRunModeUsesTheTokenFreeWechatProxy() {
+        RestClient.Builder builder = RestClient.builder();
+        MockRestServiceServer server = MockRestServiceServer.bindTo(builder).build();
+        byte[] png = Base64.getDecoder().decode(
+                "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=");
+        server.expect(once(), requestTo("http://api.weixin.qq.com/wxa/getwxacodeunlimit"))
+                .andExpect(method(POST))
+                .andRespond(withSuccess(png, MediaType.IMAGE_PNG));
+        AppProperties properties = new AppProperties(
+                new AppProperties.Jwt("test-secret-must-be-at-least-thirty-two-bytes", java.time.Duration.ofDays(7), java.time.Duration.ofHours(2)),
+                new AppProperties.Wechat("", "", false, true, "http://api.weixin.qq.com", "trial", true),
+                new AppProperties.Admin(""),
+                new AppProperties.Assessment(6, List.of(), 3, 4));
+        WxAcodeService service = new WxAcodeService(builder.build(), new ObjectMapper(), properties, Clock.systemUTC());
+
+        assertThat(service.generate("M3TEST88")).startsWith("data:image/png;base64,");
         server.verify();
     }
 }
