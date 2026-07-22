@@ -29,30 +29,16 @@ function clearAdminToken() {
 }
 
 function login() {
-  return new Promise((resolve, reject) => {
-    wx.login({
-      success(loginResult) {
-        if (!loginResult.code) {
-          reject(new Error('微信登录未返回 code'))
-          return
-        }
-        callContainer({
-          url: '/auth/wx-login',
-          method: 'POST',
-          data: { code: loginResult.code }
-        }).then(response => {
-          const body = response.data || {}
-          if (response.statusCode >= 200 && response.statusCode < 300 && body.code === 0) {
-            setToken(body.data.token)
-            resolve(body.data)
-            return
-          }
-          reject(new Error(body.msg || '登录失败'))
-        })
-          .catch(reject)
-      },
-      fail: reject
-    })
+  return callContainer({
+    url: '/auth/wx-login',
+    method: 'POST'
+  }).then(response => {
+    const body = response.data || {}
+    if (response.statusCode >= 200 && response.statusCode < 300 && body.code === 0) {
+      setToken(body.data.token)
+      return body.data
+    }
+    throw new Error(body.msg || `登录失败（${response.statusCode}）`)
   })
 }
 
