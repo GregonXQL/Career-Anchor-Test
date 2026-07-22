@@ -1,6 +1,7 @@
 const test = require('node:test')
 const assert = require('node:assert/strict')
 const { ANCHOR_ORDER, buildReportView, buildHistoryView, radarVertices } = require('../utils/report')
+const { posterSize, paintReportPoster, fitText } = require('../utils/report-poster')
 const { CACHE_TTL, validCache } = require('../utils/profiles')
 
 const profiles = ANCHOR_ORDER.map(anchor => ({
@@ -78,4 +79,38 @@ test('profile cache is valid for exactly eight profiles before 24 hours', () => 
   assert.equal(validCache({ savedAt: now - CACHE_TTL + 1, data: profiles }, now), true)
   assert.equal(validCache({ savedAt: now - CACHE_TTL, data: profiles }, now), false)
   assert.equal(validCache({ savedAt: now - 100, data: profiles.slice(1) }, now), false)
+})
+
+test('report poster renders a complete shareable summary at a safe long-image size', () => {
+  const scores = ANCHOR_ORDER.map((anchor, index) => ({
+    anchor,
+    nameCn: `${anchor}型`,
+    raw: 20 - index,
+    avg: 3,
+    percent: 80 - index * 5
+  }))
+  const report = buildReportView({
+    id: 23,
+    createdAt: '2026-07-20 10:00:00',
+    scaleMax: 6,
+    scores,
+    top3: ANCHOR_ORDER.slice(0, 3)
+  }, profiles)
+  const drawnText = []
+  const context = {
+    save() {}, restore() {}, scale() {}, fillRect() {}, beginPath() {}, moveTo() {}, lineTo() {},
+    quadraticCurveTo() {}, closePath() {}, fill() {}, stroke() {},
+    createLinearGradient() { return { addColorStop() {} } },
+    measureText(text) { return { width: String(text).length * 8 } },
+    fillText(text) { drawnText.push(String(text)) }
+  }
+  const size = posterSize(375)
+
+  paintReportPoster(context, report, size.width, size.height)
+
+  assert.deepEqual(size, { width: 375, height: 1600 })
+  assert.equal(drawnText.includes('职业锚测评报告 · 首要职业锚'), true)
+  assert.equal(drawnText.some(text => text.includes('CA-000023')), true)
+  assert.equal(drawnText.includes('我的 Top 3 职业锚'), true)
+  assert.equal(fitText(context, '这是一段很长的文字', 24).endsWith('…'), true)
 })

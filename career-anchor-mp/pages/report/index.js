@@ -1,6 +1,7 @@
 const request = require('../../utils/request')
 const { getAnchorProfiles } = require('../../utils/profiles')
 const { buildReportView, radarVertices } = require('../../utils/report')
+const { posterSize, paintReportPoster } = require('../../utils/report-poster')
 
 Page({
   data: {
@@ -9,7 +10,10 @@ Page({
     report: null,
     displayScores: [],
     topProfiles: [],
-    adminMode: false
+    adminMode: false,
+    savingImage: false,
+    posterWidth: 375,
+    posterHeight: 1600
   },
 
   onLoad(options) {
@@ -61,7 +65,67 @@ Page({
   },
 
   saveLongImage() {
-    wx.showToast({ title: '保存长图将在二期开放', icon: 'none' })
+    if (this.data.savingImage || !this.data.report) return
+    const { windowWidth = 375 } = wx.getWindowInfo()
+    const size = posterSize(windowWidth)
+    this.setData({ savingImage: true, posterWidth: size.width, posterHeight: size.height }, () => {
+      wx.showLoading({ title: '正在生成长图', mask: true })
+      wx.nextTick(() => this.renderLongImage(size)
+        .then(filePath => this.saveImage(filePath))
+        .then(() => {
+          wx.hideLoading()
+          wx.showToast({ title: '已保存到相册', icon: 'success' })
+        })
+        .catch(error => {
+          wx.hideLoading()
+          wx.showToast({ title: error.errMsg || error.message || '长图保存失败', icon: 'none' })
+        })
+        .finally(() => {
+          if (!this.destroyed) this.setData({ savingImage: false })
+        }))
+    })
+  },
+
+  renderLongImage(size) {
+    return new Promise((resolve, reject) => {
+      wx.createSelectorQuery().in(this).select('#posterCanvas').fields({ node: true, size: true }).exec(result => {
+        const target = result && result[0]
+        if (!target || !target.node || !target.width) {
+          reject(new Error('长图画布初始化失败'))
+          return
+        }
+        try {
+          const canvas = target.node
+          const context = canvas.getContext('2d')
+          const pixelRatio = Math.max(1, Math.min(2, wx.getWindowInfo().pixelRatio || 1))
+          canvas.width = Math.round(target.width * pixelRatio)
+          canvas.height = Math.round(size.height * pixelRatio)
+          context.scale(pixelRatio, pixelRatio)
+          paintReportPoster(context, this.data.report, target.width, size.height)
+          wx.canvasToTempFilePath({
+            canvas,
+            width: target.width,
+            height: size.height,
+            destWidth: Math.round(target.width * pixelRatio),
+            destHeight: Math.round(size.height * pixelRatio),
+            fileType: 'png',
+            quality: 1,
+            success: result => resolve(result.tempFilePath),
+            fail: reject
+          }, this)
+        } catch (error) {
+          reject(error)
+        }
+      })
+    })
+  },
+
+  saveImage(filePath) {
+    return new Promise((resolve, reject) => wx.saveImageToPhotosAlbum({
+      filePath,
+      success: resolve,
+      fail: reject
+    }))
   },
 
   home() {

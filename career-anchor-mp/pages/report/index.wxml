@@ -23,7 +23,7 @@
     <view class="hero">
       <view class="hero-top">
         <view class="eyebrow">你的首要职业锚</view>
-        <view class="save-entry" bindtap="saveLongImage">保存长图</view>
+        <view class="save-entry {{savingImage ? 'disabled' : ''}}" bindtap="saveLongImage">{{savingImage ? '生成中…' : '保存长图'}}</view>
       </view>
       <view class="hero-title">{{report.top1.nameCn}}</view>
       <view class="hero-en">{{report.top1.nameEn}}</view>
@@ -80,4 +80,5 @@
     </view>
     <button class="primary-button home-button" bindtap="home">{{adminMode ? '返回管理控制台' : '返回首页'}}</button>
   </block>
+  <canvas type="2d" id="posterCanvas" class="poster-canvas" style="width: {{posterWidth}}px; height: {{posterHeight}}px;"></canvas>
 </view>
