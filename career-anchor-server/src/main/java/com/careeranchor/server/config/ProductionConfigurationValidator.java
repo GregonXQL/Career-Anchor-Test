@@ -2,6 +2,7 @@ package com.careeranchor.server.config;
 
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.core.env.Environment;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
@@ -9,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
+@Lazy(false)
 public class ProductionConfigurationValidator implements InitializingBean {
     private static final List<RequiredProperty> REQUIRED = List.of(
             new RequiredProperty("DB_URL", "spring.datasource.url"),

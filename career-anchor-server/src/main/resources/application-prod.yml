@@ -1,8 +1,13 @@
 spring:
+  main:
+    lazy-initialization: true
   datasource:
     url: ${DB_URL:}
     username: ${DB_USERNAME:}
     password: ${DB_PASSWORD:}
+
+mybatis-plus:
+  lazy-initialization: true
 
 springdoc:
   api-docs:

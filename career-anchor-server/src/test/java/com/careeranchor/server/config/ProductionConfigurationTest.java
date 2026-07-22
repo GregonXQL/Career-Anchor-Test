@@ -17,6 +17,7 @@ class ProductionConfigurationTest {
             assertThat(yaml)
                     .contains("${DB_URL:}", "${DB_USERNAME:}", "${DB_PASSWORD:}")
                     .contains("${JWT_SECRET:}", "${WECHAT_APP_ID:}", "${WECHAT_APP_SECRET:}")
+                    .contains("lazy-initialization: true")
                     .doesNotContain("career_anchor_dev", "dev-only-change-this-secret");
         }
     }
