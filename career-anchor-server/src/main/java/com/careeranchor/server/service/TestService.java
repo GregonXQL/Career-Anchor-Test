@@ -8,9 +8,13 @@ import com.careeranchor.server.dto.TestSubmitRequest;
 import com.careeranchor.server.entity.InviteCode;
 import com.careeranchor.server.entity.InviteCodeUsage;
 import com.careeranchor.server.entity.TestResult;
+import com.careeranchor.server.entity.User;
 import com.careeranchor.server.enums.AnchorType;
+import com.careeranchor.server.enums.ErrorCode;
+import com.careeranchor.server.exception.BizException;
 import com.careeranchor.server.mapper.InviteCodeUsageMapper;
 import com.careeranchor.server.mapper.TestResultMapper;
+import com.careeranchor.server.mapper.UserMapper;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;
@@ -28,6 +32,7 @@ public class TestService {
     private final SubmissionRateLimiter rateLimiter;
     private final TestResultMapper testResultMapper;
     private final InviteCodeUsageMapper usageMapper;
+    private final UserMapper userMapper;
     private final ResultService resultService;
     private final ObjectMapper objectMapper;
     private final int scaleMax;
@@ -37,6 +42,7 @@ public class TestService {
                        SubmissionRateLimiter rateLimiter,
                        TestResultMapper testResultMapper,
                        InviteCodeUsageMapper usageMapper,
+                       UserMapper userMapper,
                        ResultService resultService,
                        ObjectMapper objectMapper,
                        AppProperties properties) {
@@ -45,6 +51,7 @@ public class TestService {
         this.rateLimiter = rateLimiter;
         this.testResultMapper = testResultMapper;
         this.usageMapper = usageMapper;
+        this.userMapper = userMapper;
         this.resultService = resultService;
         this.objectMapper = objectMapper;
         this.scaleMax = properties.assessment().scaleMax();
@@ -52,6 +59,7 @@ public class TestService {
 
     @Transactional
     public ReportResponse submit(long userId, TestSubmitRequest request) {
+        requireNickname(userId);
         ScoreResult score = scoringService.score(request.answers(), request.boosted(), scaleMax);
         Instant rateMarker = rateLimiter.acquire(userId);
         try {
@@ -69,6 +77,15 @@ public class TestService {
         } catch (RuntimeException exception) {
             rateLimiter.release(userId, rateMarker);
             throw exception;
+        }
+    }
+
+    private void requireNickname(long userId) {
+        User user = userMapper.selectById(userId);
+        if (user == null || user.getNickname() == null || user.getNickname().isBlank()
+                || "微信用户".equals(user.getNickname())
+                || user.getAvatarUrl() == null || user.getAvatarUrl().isBlank()) {
+            throw new BizException(ErrorCode.USER_PROFILE_REQUIRED);
         }
     }
 

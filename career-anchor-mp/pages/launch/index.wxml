@@ -9,7 +9,7 @@
   <view wx:if="{{privacyVisible}}" class="privacy-mask">
     <view class="privacy-dialog">
       <view class="privacy-title">隐私保护提示</view>
-      <view class="privacy-copy">为了完成微信登录、保存测评进度并生成历史报告，我们会处理你的微信身份标识、测评作答与结果数据。数据仅用于提供本小程序服务。</view>
+      <view class="privacy-copy">为了完成登录、区分测评报告并保存历史记录，我们会处理你的微信身份标识、主动填写的昵称、主动选择的头像、测评作答与结果数据。仅在你主动操作时使用相册、相机或剪贴板能力。</view>
       <view class="privacy-link" bindtap="openPrivacyContract">查看《用户隐私保护指引》</view>
       <view wx:if="{{privacyError}}" class="privacy-error">{{privacyError}}</view>
       <view class="privacy-actions">

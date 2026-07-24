@@ -3,11 +3,13 @@ package com.careeranchor.server.service;
 import com.careeranchor.server.config.AuthContext;
 import com.careeranchor.server.dto.ReportResponse;
 import com.careeranchor.server.entity.TestResult;
+import com.careeranchor.server.entity.User;
 import com.careeranchor.server.enums.AnchorType;
 import com.careeranchor.server.enums.ErrorCode;
 import com.careeranchor.server.enums.Role;
 import com.careeranchor.server.exception.BizException;
 import com.careeranchor.server.mapper.TestResultMapper;
+import com.careeranchor.server.mapper.UserMapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 
@@ -20,12 +22,18 @@ import static org.mockito.Mockito.when;
 
 class ResultServiceTest {
     private final TestResultMapper mapper = mock(TestResultMapper.class);
-    private final ResultService service = new ResultService(mapper, new ObjectMapper());
+    private final UserMapper userMapper = mock(UserMapper.class);
+    private final ResultService service = new ResultService(mapper, userMapper, new ObjectMapper());
 
     @Test
     void buildsAReportAndEnforcesOwnership() {
         TestResult result = result();
         when(mapper.selectById(9L)).thenReturn(result);
+        User user = new User();
+        user.setId(42L);
+        user.setNickname("小林");
+        user.setAvatarUrl("data:image/jpeg;base64,aGVsbG8=");
+        when(userMapper.selectById(42L)).thenReturn(user);
 
         ReportResponse report = service.get(9L, new AuthContext.Principal(42L, Role.USER));
 
@@ -39,6 +47,8 @@ class ResultServiceTest {
                         AnchorType.AUTONOMY, AnchorType.SECURITY, AnchorType.CREATIVITY,
                         AnchorType.SERVICE, AnchorType.CHALLENGE, AnchorType.LIFESTYLE);
         assertThat(report.scores().getFirst().percent()).isEqualTo(100);
+        assertThat(report.user().nickname()).isEqualTo("小林");
+        assertThat(report.user().avatarUrl()).startsWith("data:image/jpeg");
 
         assertThatThrownBy(() -> service.get(9L,
                 new AuthContext.Principal(99L, Role.USER)))

@@ -20,6 +20,15 @@
   </view>
 
   <block wx:else>
+    <view class="report-owner">
+      <image wx:if="{{report.user.avatarUrl}}" class="owner-avatar" src="{{report.user.avatarUrl}}" mode="aspectFill"></image>
+      <view wx:else class="owner-avatar owner-avatar-empty">{{report.user.initial}}</view>
+      <view class="owner-copy">
+        <view class="owner-label">职业锚测评报告</view>
+        <view class="owner-name">{{report.user.nickname}}</view>
+      </view>
+    </view>
+
     <view class="hero">
       <view class="hero-top">
         <view class="eyebrow">你的首要职业锚</view>

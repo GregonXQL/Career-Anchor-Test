@@ -1,0 +1,19 @@
+.profile-page { padding-top: 46rpx; }
+.eyebrow { color: #B09A88; font-size: 21rpx; letter-spacing: 4rpx; }
+.title { margin-top: 16rpx; }
+.subtitle { margin-top: 18rpx; color: #81756D; font-size: 25rpx; line-height: 1.7; }
+.profile-card { margin-top: 42rpx; padding: 42rpx 32rpx; border-radius: 28rpx; background: #fff; box-shadow: 0 14rpx 38rpx rgba(71,66,62,.08); }
+.avatar-wrap { display: flex; justify-content: center; }
+.avatar, .avatar-placeholder, .avatar-skeleton { width: 184rpx; height: 184rpx; border-radius: 50%; }
+.avatar { background: #EDE7DE; }
+.avatar-placeholder { display: flex; align-items: center; justify-content: center; color: #A99B90; background: #EDE7DE; font-size: 25rpx; }
+.avatar-skeleton { margin: 0 auto 38rpx; }
+.avatar-actions { display: flex; gap: 18rpx; margin-top: 30rpx; }
+.avatar-button { flex: 1; height: 72rpx; padding: 0; border: 1rpx solid #D9CEC5; border-radius: 14rpx; color: #765F50; background: #F7F4F0; font-size: 24rpx; line-height: 72rpx; }
+.avatar-button::after { border: 0; }
+.primary-avatar { color: #fff; background: #A88066; border-color: #A88066; }
+.field-label { margin-top: 42rpx; color: #655146; font-size: 26rpx; font-weight: 650; }
+.nickname-input { height: 84rpx; margin-top: 14rpx; padding: 0 24rpx; border-radius: 14rpx; color: #5C534D; background: #F5F2ED; font-size: 27rpx; }
+.field-tip { margin-top: 12rpx; color: #A09790; font-size: 21rpx; }
+.save-button { margin-top: 42rpx; }
+.privacy-note { margin-top: 30rpx; color: #A09790; font-size: 21rpx; line-height: 1.6; text-align: center; }

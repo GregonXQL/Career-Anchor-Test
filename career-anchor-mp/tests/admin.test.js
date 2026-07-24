@@ -16,9 +16,13 @@ test('manual invite option is normalized for the shared quiz flow', () => {
 })
 
 test('admin result and invite views expose localized management labels', () => {
-  const results = resultViews([{ id: 1, nickname: '微信用户', openidSuffix: 'ABC123', top1: 'CHALLENGE' }])
+  const results = resultViews([
+    { id: 1, nickname: '微信用户', openidSuffix: 'ABC123', top1: 'CHALLENGE' },
+    { id: 2, nickname: '小林', openidSuffix: 'XYZ789', top1: 'SERVICE' }
+  ])
   assert.equal(results[0].top1Name, '挑战型')
   assert.equal(results[0].userLabel, '微信用户 · ABC123')
+  assert.equal(results[1].userLabel, '小林 · XYZ789')
 
   const invites = inviteViews([{ status: 'ACTIVE', channel: 'QR', usedCount: 1, maxUses: 5 }])
   assert.equal(invites[0].statusLabel, '有效')

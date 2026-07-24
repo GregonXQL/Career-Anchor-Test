@@ -10,5 +10,8 @@ public record ReportResponse(
         int scaleMax,
         List<Integer> boosted,
         List<ScoreResult.AnchorScore> scores,
-        List<AnchorType> top3) {
+        List<AnchorType> top3,
+        UserView user) {
+    public record UserView(long id, String nickname, String avatarUrl) {
+    }
 }

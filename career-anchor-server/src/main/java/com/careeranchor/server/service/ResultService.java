@@ -6,11 +6,13 @@ import com.careeranchor.server.dto.ReportResponse;
 import com.careeranchor.server.dto.ResultSummary;
 import com.careeranchor.server.dto.ScoreResult;
 import com.careeranchor.server.entity.TestResult;
+import com.careeranchor.server.entity.User;
 import com.careeranchor.server.enums.AnchorType;
 import com.careeranchor.server.enums.ErrorCode;
 import com.careeranchor.server.enums.Role;
 import com.careeranchor.server.exception.BizException;
 import com.careeranchor.server.mapper.TestResultMapper;
+import com.careeranchor.server.mapper.UserMapper;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -28,10 +30,12 @@ public class ResultService {
     private static final DateTimeFormatter DATE_TIME = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     private final TestResultMapper testResultMapper;
+    private final UserMapper userMapper;
     private final ObjectMapper objectMapper;
 
-    public ResultService(TestResultMapper testResultMapper, ObjectMapper objectMapper) {
+    public ResultService(TestResultMapper testResultMapper, UserMapper userMapper, ObjectMapper objectMapper) {
         this.testResultMapper = testResultMapper;
+        this.userMapper = userMapper;
         this.objectMapper = objectMapper;
     }
 
@@ -64,9 +68,12 @@ public class ResultService {
         });
         scores.sort(Comparator.comparingInt(ScoreResult.AnchorScore::raw).reversed()
                 .thenComparingInt(score -> score.anchor().priority()));
+        User user = userMapper.selectById(result.getUserId());
+        ReportResponse.UserView userView = user == null ? null
+                : new ReportResponse.UserView(user.getId(), user.getNickname(), user.getAvatarUrl());
         return new ReportResponse(result.getId(), format(result), result.getScaleMax(),
                 boosted(result.getAnswers()), List.copyOf(scores),
-                List.of(result.getTop1(), result.getTop2(), result.getTop3()));
+                List.of(result.getTop1(), result.getTop2(), result.getTop3()), userView);
     }
 
     private Map<AnchorType, Integer> rawScores(TestResult result) {

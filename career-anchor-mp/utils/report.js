@@ -84,11 +84,16 @@ function buildReportView(result, profiles) {
     }
   })
 
+  const user = result.user || { nickname: '微信用户', avatarUrl: '' }
   return {
     id: result.id,
     resultNo: `CA-${String(result.id).padStart(6, '0')}`,
     createdAt: result.createdAt,
     scaleMax: result.scaleMax,
+    user: {
+      ...user,
+      initial: String(user.nickname || '用户').slice(0, 1)
+    },
     top1: topProfiles[0],
     displayScores,
     topProfiles,

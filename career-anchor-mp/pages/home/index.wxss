@@ -1,6 +1,14 @@
 .greeting { color: #9B9189; font-size: 26rpx; }
 .title { margin-top: 14rpx; line-height: 1.35; }
-.start-card { position: relative; margin-top: 56rpx; padding: 52rpx 44rpx; border-radius: 28rpx; color: #fff; background: linear-gradient(135deg, #A88066, #DFC9B6); box-shadow: 0 18rpx 44rpx rgba(168,128,102,.22); }
+.profile-card { display: flex; min-height: 108rpx; margin-top: 36rpx; padding: 24rpx; align-items: center; box-sizing: border-box; border-radius: 24rpx; background: #fff; box-shadow: 0 10rpx 32rpx rgba(71,66,62,.07); }
+.profile-avatar { width: 82rpx; height: 82rpx; flex: none; border-radius: 50%; background: #EDE7DE; }
+.profile-avatar-empty { display: flex; align-items: center; justify-content: center; color: #A99B90; font-size: 20rpx; }
+.profile-copy { flex: 1; min-width: 0; margin-left: 22rpx; }
+.profile-title { color: #655146; font-size: 29rpx; font-weight: 650; }
+.profile-desc { margin-top: 8rpx; color: #9B9189; font-size: 21rpx; line-height: 1.5; }
+.profile-edit { margin-left: 16rpx; color: #A88066; font-size: 22rpx; }
+.profile-loading { width: 100%; height: 64rpx; border-radius: 14rpx; }
+.start-card { position: relative; margin-top: 28rpx; padding: 52rpx 44rpx; border-radius: 28rpx; color: #fff; background: linear-gradient(135deg, #A88066, #DFC9B6); box-shadow: 0 18rpx 44rpx rgba(168,128,102,.22); }
 .card-title { font-size: 40rpx; font-weight: 700; }
 .card-desc { margin-top: 14rpx; opacity: .9; }
 .arrow { position: absolute; right: 40rpx; top: 64rpx; font-size: 50rpx; }

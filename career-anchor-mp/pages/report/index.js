@@ -2,6 +2,7 @@ const request = require('../../utils/request')
 const { getAnchorProfiles } = require('../../utils/profiles')
 const { buildReportView, radarVertices } = require('../../utils/report')
 const { posterSize, paintReportPoster } = require('../../utils/report-poster')
+const { showPrivacyApiError } = require('../../utils/privacy-api')
 
 Page({
   data: {
@@ -13,7 +14,7 @@ Page({
     adminMode: false,
     savingImage: false,
     posterWidth: 375,
-    posterHeight: 1600
+    posterHeight: 1690
   },
 
   onLoad(options) {
@@ -78,7 +79,7 @@ Page({
         })
         .catch(error => {
           wx.hideLoading()
-          wx.showToast({ title: error.errMsg || error.message || '长图保存失败', icon: 'none' })
+          showPrivacyApiError(wx, error, '保存图片到相册')
         })
         .finally(() => {
           if (!this.destroyed) this.setData({ savingImage: false })
@@ -101,22 +102,37 @@ Page({
           canvas.width = Math.round(target.width * pixelRatio)
           canvas.height = Math.round(size.height * pixelRatio)
           context.scale(pixelRatio, pixelRatio)
-          paintReportPoster(context, this.data.report, target.width, size.height)
-          wx.canvasToTempFilePath({
-            canvas,
-            width: target.width,
-            height: size.height,
-            destWidth: Math.round(target.width * pixelRatio),
-            destHeight: Math.round(size.height * pixelRatio),
-            fileType: 'png',
-            quality: 1,
-            success: result => resolve(result.tempFilePath),
-            fail: reject
-          }, this)
+          this.loadCanvasImage(canvas, this.data.report.user.avatarUrl)
+            .catch(() => null)
+            .then(avatarImage => {
+              paintReportPoster(context, this.data.report, target.width, size.height, avatarImage)
+              wx.canvasToTempFilePath({
+                canvas,
+                width: target.width,
+                height: size.height,
+                destWidth: Math.round(target.width * pixelRatio),
+                destHeight: Math.round(size.height * pixelRatio),
+                fileType: 'png',
+                quality: 1,
+                success: result => resolve(result.tempFilePath),
+                fail: reject
+              }, this)
+            })
+            .catch(reject)
         } catch (error) {
           reject(error)
         }
       })
+    })
+  },
+
+  loadCanvasImage(canvas, source) {
+    if (!source) return Promise.resolve(null)
+    return new Promise((resolve, reject) => {
+      const image = canvas.createImage()
+      image.onload = () => resolve(image)
+      image.onerror = () => reject(new Error('头像加载失败'))
+      image.src = source
     })
   },
 

@@ -50,7 +50,7 @@ public interface TestResultMapper extends BaseMapper<TestResult> {
             <script>
             SELECT tr.id, tr.user_id AS userId,
                    COALESCE(NULLIF(u.nickname, ''), '微信用户') AS nickname,
-                   u.avatar_url AS avatarUrl, RIGHT(u.openid, 6) AS openidSuffix,
+                   NULL AS avatarUrl, RIGHT(u.openid, 6) AS openidSuffix,
                    DATE_FORMAT(tr.created_at, '%Y-%m-%d %H:%i:%s') AS createdAt,
                    tr.top1, tr.top2, tr.top3
             FROM test_results tr

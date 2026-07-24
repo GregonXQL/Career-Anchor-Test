@@ -1,7 +1,7 @@
 const { radarVertices } = require('./report')
 
 const DESIGN_WIDTH = 375
-const DESIGN_HEIGHT = 1600
+const DESIGN_HEIGHT = 1690
 
 function posterSize(width) {
   const safeWidth = Math.max(320, Math.min(430, Number(width) || DESIGN_WIDTH))
@@ -88,7 +88,36 @@ function drawRadar(context, radar, centerX, centerY, radius) {
   })
 }
 
-function paintReportPoster(context, report, width, height) {
+function drawOwner(context, user, avatarImage) {
+  fillRoundedRect(context, 18, 20, 339, 76, 16, '#FFFFFF')
+  context.save()
+  context.beginPath()
+  context.arc(60, 58, 24, 0, Math.PI * 2)
+  context.closePath()
+  if (avatarImage) {
+    context.clip()
+    context.drawImage(avatarImage, 36, 34, 48, 48)
+  } else {
+    context.fillStyle = '#EDE7DE'
+    context.fill()
+    context.fillStyle = '#8A6A4F'
+    context.font = 'bold 18px sans-serif'
+    context.textAlign = 'center'
+    context.textBaseline = 'middle'
+    context.fillText(String((user && user.nickname) || '用户').slice(0, 1), 60, 58)
+  }
+  context.restore()
+  context.fillStyle = '#A09790'
+  context.font = '10px sans-serif'
+  context.textAlign = 'left'
+  context.textBaseline = 'alphabetic'
+  context.fillText('职业锚测评报告', 102, 52)
+  context.fillStyle = '#57483F'
+  context.font = 'bold 18px sans-serif'
+  context.fillText(fitText(context, user && user.nickname, 225), 102, 76)
+}
+
+function paintReportPoster(context, report, width, height, avatarImage) {
   if (!report || !report.top1 || !Array.isArray(report.displayScores)
       || !Array.isArray(report.topProfiles) || !Array.isArray(report.radar)) {
     throw new Error('报告长图数据不完整')
@@ -99,6 +128,8 @@ function paintReportPoster(context, report, width, height) {
   const canvasHeight = height / scale
   context.fillStyle = '#F5F2ED'
   context.fillRect(0, 0, DESIGN_WIDTH, canvasHeight)
+  drawOwner(context, report.user, avatarImage)
+  context.translate(0, 92)
 
   const gradient = context.createLinearGradient(18, 20, 357, 220)
   gradient.addColorStop(0, '#765844')

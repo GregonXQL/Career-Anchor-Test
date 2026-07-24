@@ -38,7 +38,7 @@ public class AuthService {
         }
         userMapper.touchLastLogin(user.getId());
         return new WxLoginResponse(jwtUtil.issue(user.getId(), Role.USER),
-                new WxLoginResponse.UserView(user.getId(), user.getNickname(), user.getAvatarUrl()));
+                new WxLoginResponse.UserView(user.getId(), user.getNickname(), null));
     }
 
     private String resolveOpenId(String code, String cloudSource, String cloudAppId, String cloudOpenId) {

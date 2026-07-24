@@ -4,6 +4,7 @@ import org.springframework.http.HttpStatus;
 
 public enum ErrorCode {
     VALIDATION_FAILED(40001, HttpStatus.BAD_REQUEST, "参数校验失败"),
+    USER_PROFILE_REQUIRED(40002, HttpStatus.BAD_REQUEST, "请先完善昵称和头像"),
     UNAUTHORIZED(40101, HttpStatus.UNAUTHORIZED, "Token 缺失、无效或已过期"),
     FORBIDDEN(40301, HttpStatus.FORBIDDEN, "需要管理员权限"),
     ADMIN_PASSWORD_INVALID(40302, HttpStatus.FORBIDDEN, "管理员密码错误"),

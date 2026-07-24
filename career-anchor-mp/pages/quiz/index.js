@@ -2,6 +2,7 @@ const auth = require('../../utils/auth')
 const request = require('../../utils/request')
 const privacy = require('../../utils/privacy')
 const { parseInviteOptions } = require('../../utils/invite')
+const { isProfileComplete } = require('../../utils/user-profile')
 
 const DRAFT_KEY = 'quiz_draft'
 
@@ -39,10 +40,23 @@ Page({
     this.pendingDraft = null
     this.setData({ inviteCode })
     auth.ensureLogin()
+      .then(() => request({ url: '/users/me' }))
+      .then(profile => {
+        if (!isProfileComplete(profile)) {
+          const error = new Error('请先完善昵称和头像')
+          error.nicknameRequired = true
+          wx.reLaunch({
+            url: `/pages/profile/index?redirect=${encodeURIComponent(`/pages/quiz/index?inviteCode=${inviteCode}`)}`
+          })
+          throw error
+        }
+      })
       .then(() => request({ url: '/invite/verify', method: 'POST', data: { code: inviteCode } }))
       .then(() => request({ url: '/questions' }))
       .then(data => this.prepare(data))
-      .catch(error => this.exitWithError(error.message || '无法开始测评'))
+      .catch(error => {
+        if (!error.nicknameRequired) this.exitWithError(error.message || '无法开始测评')
+      })
   },
 
   prepare(data) {

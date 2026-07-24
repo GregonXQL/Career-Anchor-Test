@@ -1,6 +1,8 @@
 const auth = require('../../utils/auth')
 const privacy = require('../../utils/privacy')
+const request = require('../../utils/request')
 const { parseInviteOptions } = require('../../utils/invite')
+const { isProfileComplete } = require('../../utils/user-profile')
 
 Page({
   data: {
@@ -62,7 +64,18 @@ Page({
   },
 
   goNext() {
-    wx.reLaunch({ url: this.redirectUrl || '/pages/home/index' })
+    if (this.checkingProfile) return
+    this.checkingProfile = true
+    const target = this.redirectUrl || '/pages/home/index'
+    request({ url: '/users/me' })
+      .then(profile => {
+        const url = isProfileComplete(profile)
+          ? target
+          : `/pages/profile/index?redirect=${encodeURIComponent(target)}`
+        wx.reLaunch({ url })
+      })
+      .catch(error => wx.showToast({ title: error.message || '用户资料加载失败', icon: 'none' }))
+      .finally(() => { this.checkingProfile = false })
   },
 
   rejectPrivacy() {

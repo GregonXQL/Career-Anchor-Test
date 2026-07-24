@@ -1,0 +1,2 @@
+ALTER TABLE users
+  MODIFY COLUMN avatar_url MEDIUMTEXT DEFAULT NULL COMMENT '压缩后的头像 data URL';

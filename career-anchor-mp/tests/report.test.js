@@ -28,6 +28,7 @@ test('buildReportView sorts raw scores and keeps radar in fixed anchor order', (
     id: 23,
     createdAt: '2026-07-20 10:00:00',
     scaleMax: 6,
+    user: { nickname: '小林', avatarUrl: 'data:image/jpeg;base64,abc' },
     scores,
     top3: ['LIFESTYLE', 'CHALLENGE', 'SERVICE']
   }, profiles)
@@ -93,13 +94,14 @@ test('report poster renders a complete shareable summary at a safe long-image si
     id: 23,
     createdAt: '2026-07-20 10:00:00',
     scaleMax: 6,
+    user: { nickname: '小林', avatarUrl: 'data:image/jpeg;base64,abc' },
     scores,
     top3: ANCHOR_ORDER.slice(0, 3)
   }, profiles)
   const drawnText = []
   const context = {
     save() {}, restore() {}, scale() {}, fillRect() {}, beginPath() {}, moveTo() {}, lineTo() {},
-    quadraticCurveTo() {}, closePath() {}, fill() {}, stroke() {},
+    quadraticCurveTo() {}, closePath() {}, fill() {}, stroke() {}, arc() {}, translate() {},
     createLinearGradient() { return { addColorStop() {} } },
     measureText(text) { return { width: String(text).length * 8 } },
     fillText(text) { drawnText.push(String(text)) }
@@ -108,7 +110,8 @@ test('report poster renders a complete shareable summary at a safe long-image si
 
   paintReportPoster(context, report, size.width, size.height)
 
-  assert.deepEqual(size, { width: 375, height: 1600 })
+  assert.deepEqual(size, { width: 375, height: 1690 })
+  assert.equal(drawnText.includes('小林'), true)
   assert.equal(drawnText.includes('职业锚测评报告 · 首要职业锚'), true)
   assert.equal(drawnText.some(text => text.includes('CA-000023')), true)
   assert.equal(drawnText.includes('我的 Top 3 职业锚'), true)

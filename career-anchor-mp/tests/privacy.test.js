@@ -1,6 +1,7 @@
 const test = require('node:test')
 const assert = require('node:assert/strict')
 const { PRIVACY_ACCEPTED_KEY, hasAccepted, authorize, openContract } = require('../utils/privacy')
+const { privacyApiError } = require('../utils/privacy-api')
 
 function storageApi(initial) {
   const values = Object.assign({}, initial)
@@ -34,4 +35,14 @@ test('older clients can accept the local notice and privacy contract errors clea
   await authorize(api)
   assert.equal(hasAccepted(api), true)
   await assert.rejects(openContract(api), /暂不支持/)
+})
+
+test('undeclared album and clipboard scopes produce an actionable platform message', () => {
+  const detail = privacyApiError({
+    errMsg: 'saveImageToPhotosAlbum:fail api scope is not declared in privacy agreement'
+  }, '保存图片到相册')
+
+  assert.equal(detail.undeclared, true)
+  assert.match(detail.message, /用户隐私保护指引/)
+  assert.match(detail.message, /保存图片到相册/)
 })

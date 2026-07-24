@@ -1,9 +1,22 @@
 <view class="page home">
-  <view class="greeting">你好，欢迎回来</view>
+  <view class="greeting">你好{{profile.nickname ? '，' + profile.nickname : ''}}</view>
   <view class="title">今天，重新认识自己的职业选择</view>
 
+  <view class="profile-card" bindtap="editProfile">
+    <view wx:if="{{profileLoading}}" class="profile-loading skeleton"></view>
+    <block wx:else>
+      <image wx:if="{{profile.avatarUrl}}" class="profile-avatar" src="{{profile.avatarUrl}}" mode="aspectFill"></image>
+      <view wx:else class="profile-avatar profile-avatar-empty">头像</view>
+      <view class="profile-copy">
+        <view class="profile-title">{{profile.nickname || '完善昵称和头像'}}</view>
+        <view class="profile-desc">个人资料仅用于区分和展示报告</view>
+      </view>
+      <view class="profile-edit">编辑 →</view>
+    </block>
+  </view>
+
   <view class="start-card" bindtap="start">
-    <view class="card-title">开始测评</view>
+    <view class="card-title">{{pendingInviteCode ? '继续测评' : '开始测评'}}</view>
     <view class="card-desc">约 8 分钟 · 40 题</view>
     <view class="arrow">→</view>
   </view>

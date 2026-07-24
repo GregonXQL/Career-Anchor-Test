@@ -1,6 +1,7 @@
 const auth = require('../../../utils/auth')
 const { requestAdmin } = require('../../../utils/admin')
 const { resultViews, inviteViews, resultQuery } = require('../../../utils/admin-view')
+const { showPrivacyApiError } = require('../../../utils/privacy-api')
 
 const PAGE_SIZE = 10
 
@@ -12,7 +13,7 @@ function copyText(data) {
   wx.setClipboardData({
     data,
     success: () => wx.showToast({ title: '已复制', icon: 'success' }),
-    fail: error => wx.showToast({ title: error.errMsg || '复制失败', icon: 'none' })
+    fail: error => showPrivacyApiError(wx, error, '写入剪贴板')
   })
 }
 
@@ -236,7 +237,7 @@ Page({
     this.writeQr(filePath => wx.saveImageToPhotosAlbum({
       filePath,
       success: () => wx.showToast({ title: '已保存到相册', icon: 'success' }),
-      fail: error => wx.showToast({ title: error.errMsg || '保存失败，请检查相册权限', icon: 'none' })
+      fail: error => showPrivacyApiError(wx, error, '保存图片到相册')
     }))
   },
 

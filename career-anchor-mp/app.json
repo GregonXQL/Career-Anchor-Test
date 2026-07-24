@@ -1,6 +1,7 @@
 {
   "pages": [
     "pages/launch/index",
+    "pages/profile/index",
     "pages/home/index",
     "pages/invite/index",
     "pages/quiz/index",
