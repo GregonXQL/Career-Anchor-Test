@@ -44,7 +44,8 @@ public class InviteService {
 
     private InviteCode find(String rawCode) {
         InviteCode invite = inviteCodeMapper.selectOne(Wrappers.<InviteCode>lambdaQuery()
-                .eq(InviteCode::getCode, normalize(rawCode)));
+                .eq(InviteCode::getCode, normalize(rawCode))
+                .isNull(InviteCode::getRetiredAt));
         if (invite == null) {
             throw new BizException(ErrorCode.INVITE_NOT_FOUND);
         }

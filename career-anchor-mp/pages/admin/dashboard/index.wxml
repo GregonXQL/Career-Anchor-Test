@@ -57,6 +57,7 @@
 
   <block wx:if="{{tab === 'invites'}}">
     <view class="panel-heading"><view class="panel-title">邀请码管理</view><view class="panel-desc">生成、分发与停用邀请凭证</view></view>
+    <view class="tip-card">邀请码用尽或过期后保留 24 小时，随后自动从管理列表清理；已生成的测评结果不会受影响。</view>
 
     <view class="form-card">
       <view class="form-title">批量生成手动码</view>

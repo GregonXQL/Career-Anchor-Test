@@ -21,6 +21,7 @@ public class InviteCode {
     private String remark;
     private Long createdBy;
     private LocalDateTime createdAt;
+    private LocalDateTime retiredAt;
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
@@ -42,4 +43,6 @@ public class InviteCode {
     public void setCreatedBy(Long createdBy) { this.createdBy = createdBy; }
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
+    public LocalDateTime getRetiredAt() { return retiredAt; }
+    public void setRetiredAt(LocalDateTime retiredAt) { this.retiredAt = retiredAt; }
 }

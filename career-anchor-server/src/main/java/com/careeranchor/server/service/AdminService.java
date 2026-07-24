@@ -67,7 +67,8 @@ public class AdminService {
     public AdminStatsResponse stats() {
         LocalDate today = LocalDate.now(clock);
         long activeInvites = inviteCodeMapper.selectList(Wrappers.<InviteCode>lambdaQuery()
-                        .eq(InviteCode::getStatus, InviteStatus.ACTIVE))
+                        .eq(InviteCode::getStatus, InviteStatus.ACTIVE)
+                        .isNull(InviteCode::getRetiredAt))
                 .stream().filter(invite -> "ACTIVE".equals(effectiveStatus(invite))).count();
         return new AdminStatsResponse(
                 testResultMapper.selectCount(Wrappers.<TestResult>emptyWrapper()),
@@ -113,6 +114,7 @@ public class AdminService {
         String filter = status == null || status.isBlank() ? "ALL" : status.toUpperCase(Locale.ROOT);
         if (!INVITE_FILTERS.contains(filter)) throw new BizException(ErrorCode.VALIDATION_FAILED);
         List<AdminInviteView> matches = inviteCodeMapper.selectList(Wrappers.<InviteCode>lambdaQuery()
+                        .isNull(InviteCode::getRetiredAt)
                         .orderByDesc(InviteCode::getCreatedAt).orderByDesc(InviteCode::getId)).stream()
                 .map(this::toView)
                 .filter(invite -> "ALL".equals(filter) || invite.status().equals(filter))
@@ -158,7 +160,9 @@ public class AdminService {
     }
 
     private InviteCode findInvite(long id) {
-        InviteCode invite = inviteCodeMapper.selectById(id);
+        InviteCode invite = inviteCodeMapper.selectOne(Wrappers.<InviteCode>lambdaQuery()
+                .eq(InviteCode::getId, id)
+                .isNull(InviteCode::getRetiredAt));
         if (invite == null) throw new BizException(ErrorCode.INVITE_NOT_FOUND);
         return invite;
     }
